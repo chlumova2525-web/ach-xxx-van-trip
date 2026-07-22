@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vandrbuch · HK → Châtel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#F5EEDF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Vandrbuch">
+<style>
+:root{
+  --paper:#F5EEDF; --card:#FBF7EC; --ink:#2E2A23; --muted:#8A8272;
+  --terra:#D96C3F; --sage:#7C8B6F; --slate:#6E8CA0; --line:#D9CFBA;
+  --cZ:#5E8C61; --cL:#C9A227; --cP:#D96C3F; --cD:#B3402F; --cT:#6E8CA0;
+  --tM:#BE7A50; --tH:#96719F; --tV:#6E8CA0; --tS:#7C8B6F; --tJ:#4FA3A0; --tP:#C2914F; --tK:#8A7360; --tT:#9A9282;
+  --mono:ui-monospace,"SF Mono",Consolas,Menlo,monospace;
+  --serif:"Fraunces","Iowan Old Style",Georgia,serif;
+  --script:"Caveat","Segoe Script",cursive;
+  --sans:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);padding-bottom:78px}
+/* hero */
+#hero{max-width:760px;margin:0 auto;padding:18px 16px 0;text-align:center}
+#hero .brand{font-family:var(--mono);font-size:19px;letter-spacing:.42em;text-transform:uppercase;font-weight:700}
+#hero .tag{font-family:var(--script);font-size:21px;color:var(--muted);margin-top:2px}
+#heroArt{width:100%;max-width:420px;height:auto;display:block;margin:2px auto 0}
+#hdrSub{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.12em;margin-top:2px}
+#ribbonWrap{max-width:760px;margin:0 auto;padding:4px 16px 8px}
+#ribbon{width:100%;height:46px;display:block}
+main{max-width:760px;margin:0 auto;padding:10px 14px}
+.tabpane{display:none}.tabpane.on{display:block}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1.5px solid var(--ink);display:flex;z-index:40}
+nav button{flex:1;border:0;background:none;padding:9px 2px 8px;font-family:var(--mono);font-size:10px;color:var(--muted);cursor:pointer;letter-spacing:.06em}
+nav button .ic{display:block;font-size:18px;margin-bottom:2px;filter:grayscale(.4)}
+nav button.on{color:var(--ink);font-weight:700}
+nav button.on .ic{filter:none}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.card{background:var(--card);border:1.5px solid var(--ink);border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:3px 3px 0 rgba(46,42,35,.08)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.chip{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--paper)}
+.place{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1.5px solid var(--ink);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:3px 3px 0 rgba(46,42,35,.08)}
+.dotc{width:12px;height:12px;border-radius:50%;margin-top:4px;flex:none;border:1.5px solid var(--ink)}
+.place h3{font-family:var(--serif);font-size:15.5px;font-weight:600}
+.place .meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:2px}
+.place .st{margin-left:auto;font-size:16px;flex:none}
+.badge{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:5px;color:#FBF7EC;margin-right:4px}
+select,input[type=text],input[type=number],textarea{font:inherit;padding:8px 10px;border:1.5px solid var(--ink);border-radius:9px;background:var(--card);color:var(--ink);width:100%}
+.row{display:flex;gap:8px}
+.btn{display:inline-block;border:1.5px solid var(--ink);border-radius:9px;padding:9px 13px;font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:none;text-align:center;box-shadow:2px 2px 0 rgba(46,42,35,.18)}
+.btn.p{background:var(--terra);color:#FBF7EC}
+.btn.g{background:var(--card);color:var(--ink)}
+#ov{position:fixed;inset:0;background:rgba(46,42,35,.55);display:none;z-index:60}
+#ov.on{display:block}
+#modal{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--paper);border:1.5px solid var(--ink);border-bottom:0;border-radius:18px 18px 0 0;z-index:61;display:none;max-width:760px;margin:0 auto}
+#modal.on{display:block}
+#modal .inner{padding:16px 16px 24px}
+#modal h2{font-family:var(--serif);font-size:22px;line-height:1.2}
+.kv{font-family:var(--mono);font-size:11px;color:var(--muted);margin:10px 0 3px;letter-spacing:.12em;text-transform:uppercase}
+.fact{background:#F1E4C6;border:1.5px solid var(--ink);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.park{background:#E9EBDC;border:1.5px solid var(--ink);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.stbtns{display:flex;gap:6px;margin-top:8px}
+.stbtns button{flex:1;padding:8px;border-radius:9px;border:1.5px solid var(--ink);background:var(--card);font-size:13px;cursor:pointer}
+.stbtns button.on{background:var(--ink);color:var(--paper)}
+.mapframe iframe{width:100%;height:62vh;min-height:380px;border:1.5px solid var(--ink);border-radius:12px;background:#fff;display:block}
+details{border:1.5px dashed var(--muted);border-radius:12px;padding:10px 12px;margin-top:12px}
+summary{cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted)}
+#map{width:100%;height:auto;background:#EFE6D2;border:1.5px solid var(--ink);border-radius:10px;touch-action:manipulation;margin-top:10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:11.5px}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--ink)}
+.total{font-family:var(--mono);font-size:26px;font-weight:700}
+.bitem{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.bitem button{border:0;background:none;color:var(--cD);cursor:pointer;font-size:14px}
+.info p{font-size:14px;line-height:1.55;margin-bottom:10px}
+.info h3{font-family:var(--serif);margin:14px 0 4px}
+small.note{color:var(--muted);font-size:11.5px;display:block;margin-top:6px}
+@media(min-width:700px){ nav{max-width:760px;margin:0 auto;border:1.5px solid var(--ink);border-bottom:0;border-radius:14px 14px 0 0} }
+
+/* --- doodle icons & sticker buttons --- */
+.tico{width:28px;height:28px;border:1.8px solid var(--ink);border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
+.tico svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-width:2px;border-radius:12px;box-shadow:0 0 0 2.5px #FBF7EC,3px 4px 0 rgba(46,42,35,.28)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn:active{transform:translate(1px,2px);box-shadow:0 0 0 2.5px #FBF7EC,1px 1px 0 rgba(46,42,35,.28)}
+nav .icw{display:flex;align-items:center;justify-content:center;width:40px;height:30px;margin:0 auto 3px;border-radius:9px;border:1.8px solid transparent}
+nav .icw svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2px 2px 0 rgba(46,42,35,.22)}
+.chip{border-width:1.8px}
+.stbtns button{border-width:1.8px;box-shadow:2px 2px 0 rgba(46,42,35,.12)}
+
+.chip{display:inline-flex;align-items:center;gap:6px}
+.cico{width:17px;height:17px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cdot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--ink);display:inline-block;flex:none}
+.chip.on .cico{stroke:var(--paper)}
+
+.mini{display:block;position:relative;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;margin-top:4px;box-shadow:3px 3px 0 rgba(46,42,35,.12)}
+.mini iframe{width:100%;height:185px;border:0;pointer-events:none;display:block;background:#DDE7E2}
+.minihint{position:absolute;right:8px;bottom:8px;background:var(--card);border:1.5px solid var(--ink);border-radius:999px;font-family:var(--mono);font-size:10px;padding:3px 9px}
+.nearb{font-size:11.5px;padding:5px 10px}
+
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.stat b{font-family:var(--mono);font-size:19px;display:block;line-height:1.1}
+.stat span{font-family:var(--mono);font-size:9.3px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.stk{border:1.8px solid var(--ink);border-radius:12px;padding:9px 5px 7px;text-align:center;background:var(--paper);box-shadow:0 0 0 2.5px #FBF7EC,2px 3px 0 rgba(46,42,35,.18)}
+.stk svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stk .t{font-family:var(--mono);font-size:9.3px;letter-spacing:.03em;margin-top:4px;text-transform:uppercase;font-weight:700}
+.stk .d{font-size:10px;color:var(--muted);margin-top:2px}
+.stk.lock{opacity:.38;border-style:dashed;box-shadow:none;filter:grayscale(1)}
+
+.meta{display:flex;flex-wrap:wrap;gap:4px 5px;align-items:center;margin-top:4px}
+.tag2{font-family:var(--mono);font-size:9.3px;text-transform:uppercase;letter-spacing:.04em;border:1.2px solid var(--line);border-radius:5px;padding:1.5px 6px;color:var(--muted);display:inline-flex;align-items:center;gap:4px;background:var(--card)}
+.tag2.ok{border-color:#5E8C61;color:#5E8C61}
+.tag2.warn{border-color:#C9A227;color:#8f7517}
+.tag2.no{border-color:#B3402F;color:#B3402F}
+.cdot.sm{width:8px;height:8px;border-width:1.2px}
+
+.kmrow{display:flex;align-items:center;gap:8px}
+.kmrow input{flex:1}
+.kmrow .cico{width:22px;height:22px;flex:none}
+</style>
+</head>
+<body>
+<svg style="display:none" aria-hidden="true"><defs>
+<symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="#FBF7EC"/><path d="M15.4 8.6 L13.3 13.3 L8.6 15.4 L10.7 10.7 Z" fill="#D96C3F"/><circle cx="12" cy="12" r="0.9" fill="#2E2A23"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="M4 6.5 L9 4.5 L15 6.5 L20 4.5 V17.5 L15 19.5 L9 17.5 L4 19.5 Z" fill="#F1E4C6"/><path d="M9 4.5 V17.5 M15 6.5 V19.5"/><circle cx="12" cy="11" r="1.2" fill="#D96C3F" stroke="none"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21 C12 21 5.5 14.3 5.5 9.9 A6.5 6.5 0 0 1 18.5 9.9 C18.5 14.3 12 21 12 21 Z" fill="#D96C3F"/><circle cx="12" cy="10" r="2.3" fill="#FBF7EC"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M6 4.5 H16.8 A1.7 1.7 0 0 1 18.5 6.2 V19.5 H7.7 A1.7 1.7 0 0 1 6 17.8 Z" fill="#9DB088"/><path d="M6 16.5 A1.7 1.7 0 0 0 7.7 18.2 H18.5"/><path d="M13.6 4.5 V9.2 L15.2 7.9 L16.8 9.2 V4.5" fill="#D96C3F"/><path d="M9 9 H12 M9 12 H12"/></symbol>
+<symbol id="i-lantern" viewBox="0 0 24 24"><path d="M9 5.6 A3 3 0 0 1 15 5.6"/><rect x="8.4" y="5.6" width="7.2" height="2.4" rx="1" fill="#9DB088"/><path d="M8 8 H16 L15.1 16.4 H8.9 Z" fill="#FBF7EC"/><path d="M12 10.4 C13 11.6 13 13 12 13.8 C11 13 11 11.6 12 10.4 Z" fill="#E3B23C"/><path d="M8.4 16.4 H15.6 V18.6 H8.4 Z" fill="#9DB088"/></symbol>
+<symbol id="i-town" viewBox="0 0 24 24"><path d="M3.5 19.5 V11 L8 7.4 L12.5 11 V19.5 Z" fill="#F1E4C6"/><path d="M12.5 19.5 H20.5 V9.6 L16.5 6.6 L12.5 9.6" fill="#E5D3A8"/><rect x="6.6" y="14.2" width="2.8" height="5.3" fill="#D96C3F"/><rect x="15.2" y="12.6" width="2.8" height="2.8" fill="#8FB0C1"/></symbol>
+<symbol id="i-castle" viewBox="0 0 24 24"><path d="M7 20 V9 H8.8 V11 H10.9 V9 H13.1 V11 H15.2 V9 H17 V20 Z" fill="#E5D3A8"/><path d="M12 9 V3.8 H15.4 L14.1 5.4 L15.4 7 H12" fill="#D96C3F"/><rect x="10.6" y="15" width="2.8" height="5" fill="#8A7360"/></symbol>
+<symbol id="i-fall" viewBox="0 0 24 24"><path d="M4.5 6.5 H9.5 V15.5 H4.5 Z" fill="#E5D3A8"/><path d="M19.5 6.5 H14.5 V15.5 H19.5 Z" fill="#E5D3A8"/><path d="M11 6.5 V14.8 M13 6.5 V14.8" stroke="#8FB0C1"/><path d="M4.5 17.9 Q6.5 16.5 8.5 17.9 T12.5 17.9 T16.5 17.9 T19.5 17.7" stroke="#6E8CA0"/></symbol>
+<symbol id="i-gorge" viewBox="0 0 24 24"><path d="M5 4.5 V9 L8.5 12 V19.5 H5 Z" fill="#E5D3A8"/><path d="M19 4.5 V9 L15.5 12 V19.5 H19 Z" fill="#E5D3A8"/><circle cx="12" cy="6.5" r="1.6" fill="#E3B23C"/><path d="M9.4 18.3 Q10.9 17.1 12.4 18.3 T14.9 18.3" stroke="#6E8CA0"/></symbol>
+<symbol id="i-lake" viewBox="0 0 24 24"><path d="M13.2 5.6 L9.8 13.8"/><ellipse cx="13.9" cy="4.9" rx="1.5" ry="2.2" transform="rotate(22 13.9 4.9)" fill="#B98A5F"/><path d="M5.5 13.8 H16.5 C17.7 13.8 17.7 15.7 16.5 15.7 H5.5 C4.3 15.7 4.3 13.8 5.5 13.8 Z" fill="#D96C3F"/><path d="M4 19 Q6 17.7 8 19 T12 19 T16 19 T20 19" stroke="#6E8CA0"/></symbol>
+<symbol id="i-boots" viewBox="0 0 24 24"><path d="M6 4.5 H11 V10.8 L12.6 12.4 H16.4 C18.4 12.4 19.6 13.9 19.6 15.5 V17 H6 Z" fill="#C2914F"/><path d="M5.5 17 H20 V19 H5.5 Z" fill="#8A7360"/><path d="M8 7.3 H9.6 M8 9.7 H9.6"/></symbol>
+<symbol id="i-cave" viewBox="0 0 24 24"><path d="M4 19.5 V12 A8 8 0 0 1 20 12 V19.5 Z" fill="#E5D3A8"/><path d="M8.5 19.5 V14.3 A3.5 3.5 0 0 1 15.5 14.3 V19.5 Z" fill="#5C544A"/><path d="M4 19.5 H20"/></symbol>
+<symbol id="i-van" viewBox="0 0 24 24"><path d="M5 17 V8.6 C5 7.2 5.9 6.3 7.3 6.3 H14.6 C15.9 6.3 16.8 6.8 17.6 7.9 L19.4 10.5 C19.9 11.2 20.1 11.8 20.1 12.7 V17 Z" fill="#FBF7EC"/><path d="M14.9 7.6 L17.9 11.6 H14.9 Z" fill="#8FB0C1"/><rect x="6.8" y="7.9" width="5.6" height="3.8" rx="0.8" fill="#8FB0C1"/><path d="M5 14.2 H20.1" stroke="#D96C3F"/><circle cx="8.4" cy="17.6" r="1.9" fill="#FBF7EC"/><circle cx="16.6" cy="17.6" r="1.9" fill="#FBF7EC"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="#CDE0E8"/><ellipse cx="12" cy="12" rx="3.7" ry="8.4"/><path d="M3.8 12 H20.2"/></symbol>
+<symbol id="i-cam" viewBox="0 0 24 24"><rect x="4" y="7.5" width="16" height="11" rx="2" fill="#DCE3E6"/><path d="M9 7.5 L10.2 5.5 H13.8 L15 7.5" fill="#DCE3E6"/><circle cx="12" cy="13" r="3.1" fill="#FBF7EC"/><circle cx="17.1" cy="10.1" r="0.7" fill="#D96C3F" stroke="none"/></symbol>
+<symbol id="i-wind" viewBox="0 0 24 24"><path d="M4 9 H12.6 A2.2 2.2 0 1 0 10.6 5.6" stroke="#6E8CA0"/><path d="M4 13 H17.8 A2.2 2.2 0 1 1 15.8 16.4" stroke="#6E8CA0"/><path d="M4 17 H9.5" stroke="#6E8CA0"/></symbol>
+<symbol id="i-nav" viewBox="0 0 24 24"><path d="M20 4.5 L4.5 10.8 L10.7 13.3 L13.2 19.5 Z" fill="#F1E4C6"/><path d="M10.7 13.3 L20 4.5"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M6.8 20.5 V4.2"/><path d="M6.8 5.2 H17.4 L14.9 8.3 L17.4 11.4 H6.8 Z" fill="#D96C3F"/></symbol>
+<symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 9.5 H16 V16.5 A3 3 0 0 1 13 19.5 H8 A3 3 0 0 1 5 16.5 Z" fill="#D96C3F"/><path d="M16 11 H17.4 A2.2 2.2 0 0 1 17.4 15.4 H16"/><path d="M8 7 C8 5.8 9 5.8 9 4.6 M12 7 C12 5.8 13 5.8 13 4.6"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6" fill="#E3B23C"/><path d="M12 3.2 V5.6 M12 18.4 V20.8 M3.2 12 H5.6 M18.4 12 H20.8 M5.8 5.8 L7.5 7.5 M16.5 16.5 L18.2 18.2 M18.2 5.8 L16.5 7.5 M7.5 16.5 L5.8 18.2"/></symbol>
+<symbol id="i-rain" viewBox="0 0 24 24"><path d="M7.3 13.6 A4 4 0 1 1 8.6 6.7 A4.8 4.8 0 0 1 17.6 8.7 A3.1 3.1 0 0 1 16.7 13.6 Z" fill="#DCE3E6"/><path d="M9 16 L8 18.6 M12.4 16 L11.4 18.6 M15.8 16 L14.8 18.6" stroke="#6E8CA0"/></symbol>
+<symbol id="i-tent" viewBox="0 0 24 24"><path d="M12 4.8 L20.6 19.5 H3.4 Z" fill="#D96C3F"/><path d="M12 11.3 L9.1 19.5 H14.9 Z" fill="#F1E4C6"/><path d="M12 4.8 L10.6 3.2 M12 4.8 L13.4 3.2"/><path d="M2.6 19.5 H21.4"/></symbol>
+<symbol id="i-mtn" viewBox="0 0 24 24"><path d="M3.5 19 L9 8.5 L12.3 14.2 L15.1 9.5 L20.5 19 Z" fill="#9DB088"/><path d="M7.9 10.7 L9 8.5 L10.1 10.5 L9.3 11.3 Z" fill="#FBF7EC"/><circle cx="18.6" cy="5.9" r="1.8" fill="#E3B23C"/></symbol>
+</defs></svg>
+<div id="hero">
+  <div class="brand">Vandrbuch</div>
+  <div class="tag">Miles, smiles &amp; mild chaos.</div>
+  <svg id="heroArt" viewBox="0 0 420 96" fill="none" stroke="#2E2A23" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="272" cy="30" r="15"/>
+    <path d="M8 74 H68 C86 74 96 58 108 46 L132 66 L158 26 C160 23 163 23 165 26 L192 62 L212 46 L238 70 C256 74 268 74 300 74"/>
+    <path d="M132 66 L142 58 L150 64" stroke-width="1.2"/>
+    <path d="M300 74 H412" stroke-dasharray="1 7"/>
+    <path d="M312 74 V50 C312 45.6 314.8 43 319 43 H340.5 C344.5 43 347 44.4 349.2 47.6 L355.5 56.8 C357 59 357.6 60.8 357.6 63.4 V74 Z" fill="#FBF7EC"/>
+    <path d="M341.5 46.5 L348.6 56.5 H341.5 Z" fill="#8FB0C1"/>
+    <rect x="316.5" y="47" width="13" height="9" rx="2" fill="#8FB0C1"/>
+    <line x1="334" y1="50" x2="334" y2="70"/>
+    <path d="M312 64 H357.6" stroke-width="1.2"/>
+    <circle cx="322" cy="74" r="4.6" fill="#FBF7EC"/><circle cx="348" cy="74" r="4.6" fill="#FBF7EC"/>
+    <path d="M352 68 h4" stroke-width="1.2"/>
+  </svg>
+  <div id="hdrSub">HK → CHÂTEL · 1 180 KM · 67 MÍST · SÓLO · SRPEN</div>
+</div>
+<div id="ribbonWrap"><svg id="ribbon" viewBox="0 0 1000 46" preserveAspectRatio="none"></svg></div>
+
+<main>
+<!-- CO TEĎ -->
+<section class="tabpane on" id="pane-now">
+  <div class="eyebrow">Kde zrovna jsem</div>
+  <select id="posSel"></select>
+  <div class="eyebrow">Kolik mám času</div>
+  <div class="chips" id="chTime">
+    <button class="chip on" data-v="2">≤ 2 h</button>
+    <button class="chip" data-v="3">Půlden</button>
+    <button class="chip" data-v="4">Celý den</button>
+  </div>
+  <div class="eyebrow">Počasí</div>
+  <div class="chips" id="chWx">
+    <button class="chip on" data-v="sun"><svg class="cico"><use href="#i-sun"/></svg>Hezky</button>
+    <button class="chip" data-v="rain"><svg class="cico"><use href="#i-rain"/></svg>Leje</button>
+  </div>
+  <div class="eyebrow">Energie</div>
+  <div class="chips" id="chNrg">
+    <button class="chip" data-v="1"><svg class="cico"><use href="#i-tent"/></svg>Pohov</button>
+    <button class="chip on" data-v="2"><svg class="cico"><use href="#i-boots"/></svg>Normální</button>
+    <button class="chip" data-v="3"><svg class="cico"><use href="#i-mtn"/></svg>Hory!</button>
+  </div>
+  <div class="eyebrow">Doporučení po trase</div>
+  <div id="nowList"></div>
+</section>
+
+<!-- MAPA -->
+<section class="tabpane" id="pane-map">
+  <div class="mapframe"><iframe src="https://www.google.com/maps/d/embed?mid=1WefcPF4gx_X1gJohe0BjLuzlevGMfpo&ehbc=2E312F" loading="lazy" allowfullscreen title="Roadtrip do Chatelu – živá mapa"></iframe></div>
+  <small class="note">Živá mapa „Roadtrip do Chatelu" se všemi tvými vrstvami. Pokud se v náhledu nenačte, otevři stažený soubor přímo v prohlížeči (Chrome/Safari) — tam pojede naplno.</small>
+  <details>
+    <summary>✏️ Schéma trasy (offline záloha)</summary>
+    <div class="eyebrow">Barvy podle</div>
+    <div class="chips" id="chMode">
+      <button class="chip on" data-v="t">Typu</button>
+      <button class="chip" data-v="c">Ceny</button>
+      <button class="chip" data-v="d">Délky</button>
+    </div>
+    <svg id="map" viewBox="0 0 1000 640"></svg>
+    <div class="legend" id="legend"></div>
+    <small class="note">Ťukni na bod pro detail. 🚐 = tvoje aktuální pozice (nastav v „Co teď?").</small>
+  </details>
+</section>
+
+<!-- MÍSTA -->
+<section class="tabpane" id="pane-list">
+  <input type="text" id="q" placeholder="Hledat místo…">
+  <div class="chips" id="chTyp"></div>
+  <div class="chips" id="chCen"></div>
+  <div id="list"></div>
+</section>
+
+<!-- DENÍK -->
+<section class="tabpane" id="pane-log">
+  <div class="eyebrow">Statistiky cesty</div>
+  <div class="card"><div class="statgrid" id="statCard"></div></div>
+  <div class="card">
+    <div class="kmrow"><svg class="cico"><use href="#i-boots"/></svg><input type="number" id="kmW" placeholder="přidat km pěšky"><button class="btn g" id="kmWadd">Přidat</button></div>
+    <div class="kmrow" style="margin-top:8px"><svg class="cico"><use href="#i-van"/></svg><input type="number" id="kmD" placeholder="přidat km autem"><button class="btn g" id="kmDadd">Přidat</button></div>
+    <small class="note">Zadané kilometry mají přednost před mým odhadem z check-inů a pozice na trase.</small>
+  </div>
+  <div class="eyebrow">Nálepky</div>
+  <div class="card"><div id="stkGrid" class="stkgrid"></div></div>
+  <div class="eyebrow">Rozpočet cesty</div>
+  <div class="card">
+    <div class="total" id="bTotal">0 Kč</div>
+    <div id="bByCat" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin:4px 0 10px"></div>
+    <div class="row">
+      <input type="number" id="bAmt" placeholder="Částka" style="flex:1">
+      <select id="bCat" style="flex:1.4">
+        <option>⛽ nafta</option><option>🎟️ vstup</option><option>☕ kafe dne</option>
+        <option>🛒 jídlo</option><option>🛏️ nocleh</option><option>💳 jiné</option>
+      </select>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input type="text" id="bNote" placeholder="Poznámka (kde)" style="flex:1">
+      <button class="btn p" id="bAdd">Přidat</button>
+    </div>
+    <div id="bList" style="margin-top:8px"></div>
+    <small class="note">Zapisuj v Kč (nebo si drž jednu měnu — jde o přehled, ne účetnictví). 1 CHF ≈ 25 Kč, 1 € ≈ 25 Kč.</small>
+  </div>
+  <div class="eyebrow">Moje preference</div>
+  <div id="logPlaces"></div>
+</section>
+
+<!-- INFO -->
+<section class="tabpane info" id="pane-info">
+  <div class="eyebrow">Před odjezdem</div>
+  <div class="card">
+    <p><b>🇨🇭 Dálniční známka Švýcarsko</b> — povinná, ~40 CHF/rok (fyzická nálepka nebo e-vignette na via.admin.ch). Bez ní pokuta 200 CHF. Rakousko: krátký úsek u Bregenzu jde objet po silnici, jinak 11denní vignette ~12 €.</p>
+    <p><b>⛽ Tankovací strategie:</b> plnou v ČR → dotankovat v Rakousku (Vorarlberg u Lindau, bývá nejlevněji v regionu) → naposledy plnou ve Švýcarsku v Martigny/Monthey (Francie v horách je dražší).</p>
+    <p><b>🚐 Transit:</b> měj v mobilu vyfocenou výšku a délku vozu. Podzemní garáže (limit 2,0–2,1 m) rovnou ignoruj — všechny tipy v appce jsou venkovní plochy.</p>
+  </div>
+  <div class="eyebrow">SUP pravidla Švýcarsko</div>
+  <div class="card">
+    <p>Dál než <b>300 m od břehu</b> je povinná plovací vesta na palubě (prakticky: měj ji vždy). Leash doporučený, na řekách povinný rozum. Vyhýbej se plavebním drahám kursovních lodí (Brienzersee, Thunersee, Bodensee — lodě mají přednost vždy). <b>Oeschinensee: SUP zakázán.</b> Ranní hodiny = bezvětří; odpoledne se na velkých jezerech zvedá termický vítr (Walensee, Ženevské jezero!). Před vyplutím mrkni na Windy — odkaz je u každého SUP místa.</p>
+  </div>
+  <div class="eyebrow">Nouze a kontakty</div>
+  <div class="card">
+    <p><b>112</b> všude · Švýcarsko: policie 117, zdravotníci 144, <b>Rega vrtulník 1414</b> · Německo: 110/112 · Francie: 15/17/18. Evropská linka pomoci silniční: dle asistence tvé pojistky — měj číslo v mobilu.</p>
+    <p>Sólo tip: sdílej polohu s někým doma (WhatsApp live location), na noc parkuj na oficiálních stellplatzech, ne na odlehlých odpočívadlách u dálnice.</p>
+  </div>
+  <div class="eyebrow">Minifráze</div>
+  <div class="card">
+    <p>DE: „Darf ich hier über Nacht stehen?“ (Můžu tu stát přes noc?) · „Wo kann ich Wasser auffüllen?“ (Kde doplním vodu?)</p>
+    <p>FR: „Est-ce que je peux stationner ici la nuit ?“ · „Où puis-je remplir de l'eau ?“</p>
+  </div>
+  <div class="eyebrow">Knížky do dodávky 📚</div>
+  <div class="card">
+    <p><b>Johanna Spyri: Heidi</b> — povinnost, čti u Walensee. · <b>A. C. Doyle: Poslední případ</b> — u Reichenbachských vodopádů. · <b>F. Schiller: Vilém Tell</b> — k Hohle Gasse a Rütli. · <b>Lord Byron: Vězeň chillonský</b> — na nábřeží u Chillonu. · <b>Švýcarské pohádky</b> (výbor lidových pověstí — drak od Beatových jeskyní, modré oči Blausee). · <b>M. Twain: Tulákem po Evropě</b> — jeho výstup na Rigi je nejvtipnější kapitola o Švýcarsku, jaká kdy vznikla.</p>
+  </div>
+  <small class="note">Ceny a otvíračky jsou orientační (léto 2026) — před placeným vstupem mrkni na web místa. Data v appce se ukládají automaticky a zůstanou i po zavření.</small>
+</section>
+</main>
+
+<nav>
+  <button data-p="now" class="on"><span class="icw"><svg><use href="#i-compass"/></svg></span>Co teď?</button>
+  <button data-p="map"><span class="icw"><svg><use href="#i-map"/></svg></span>Mapa</button>
+  <button data-p="list"><span class="icw"><svg><use href="#i-pin"/></svg></span>Místa</button>
+  <button data-p="log"><span class="icw"><svg><use href="#i-book"/></svg></span>Deník</button>
+  <button data-p="info"><span class="icw"><svg><use href="#i-lantern"/></svg></span>Info</button>
+</nav>
+
+<div id="ov"></div>
+<div id="modal"><div class="inner" id="mInner"></div></div>
+
+<script>
+// ---------- DATA ----------
+// [name, lat, lng, km, typ, délka(0-4), cena, vstup, dodávka, prio, web, popis, parkování, zajímavost, déšť(1=jde i za deště), energie(1-3), sup(1=SUP)]
+const TYP={M:["🏙️ Město","--tM"],H:["🏰 Historie/hrad","--tH"],V:["💦 Vodopád","--tV"],S:["⛰️ Soutěska","--tS"],J:["🌊 Jezero/SUP","--tJ"],P:["🥾 Procházka/vyhlídka","--tP"],K:["🕳️ Jeskyně","--tK"],T:["🚐 Trasa/servis","--tT"]};
+const CEN={Z:["🟢 zdarma","--cZ"],L:["🟡 levné","--cL"],P:["🟠 placené","--cP"],D:["🔴 drahé","--cD"],T:["🚐 trasa","--cT"]};
+const TICO={M:"i-town",H:"i-castle",V:"i-fall",S:"i-gorge",J:"i-lake",P:"i-boots",K:"i-cave",T:"i-van"};
+const WALK=[0,2,4,7,12];
+const SAVED={"Pfänder":430,"Reichenbach":300,"Oeschinensee":750,"Niederhorn":1000,"Giessbach":300,"Weltenburg":500,"Rütli":250,"Staubbach":350,"Chillon":375,"Rheinfall":125,"Meersburg":400,"Quinten":250};
+const ACH=[
+ {n:"Na cestě",d:"první check-in",ic:"i-van",f:m=>m.vis>=1},
+ {n:"První vodopád",d:"1× vodopád",ic:"i-fall",f:m=>m.cnt("V")>=1},
+ {n:"Lovkyně soutěsek",d:"2× soutěska",ic:"i-gorge",f:m=>m.cnt("S")>=2},
+ {n:"Vodní živel",d:"2× jezero / SUP",ic:"i-lake",f:m=>m.cnt("J")>=2},
+ {n:"Hradní paní",d:"2× historie",ic:"i-castle",f:m=>m.cnt("H")>=2},
+ {n:"Toulavé boty",d:"15 km pěšky",ic:"i-boots",f:m=>m.walk>=15},
+ {n:"U velké louže",d:"dojela k Bodensee",ic:"i-pin",f:m=>m.driven>=660},
+ {n:"Půlka cesty",d:"590 km po trase",ic:"i-map",f:m=>m.driven>=590},
+ {n:"Za kačku",d:"5 míst zdarma",ic:"i-flag",f:m=>m.freeCnt>=5},
+ {n:"Šetřílek",d:"ušetřeno 500 Kč",ic:"i-nav",f:m=>m.saved>=500},
+ {n:"Kafemilka",d:"3× kafe dne",ic:"i-cup",f:m=>m.coffee>=3},
+ {n:"Châtel!",d:"cíl cesty 🎉",ic:"i-compass",f:m=>m.driven>=1180}];
+const DEL=["průjezd","do 1 h","1–2 h","půlden","celý den"];
+const D=[
+["🚐 START: Žíželeves (HK)",50.3323,15.7584,0,"T",0,"T","–","✅","t","https://www.hkregion.cz","Výchozí bod. Vyraz za tmy, dálnice budou prázdné.","Doma :)","Tankuj plnou v ČR — nejlevnější nafta celé trasy.",1,1,0],
+["🥾 Waldnaabtal (Falkenberg)",49.8490,12.2110,300,"P",3,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Waldnaabtal","Žulové údolí s řekou mezi obřími balvany, hospůdka Blockhütte uprostřed.","P Falkenberg u hradu, pak pěšky údolím.","V žule tu voda vybrousila „obří hrnce“ — kruhové mísy staré tisíce let.",0,2,0],
+["🌊 Steinberger See",49.2730,12.1578,330,"J",2,"Z","okolí zdarma, koule ~7 €","✅","h","https://www.oberpfaelzer-seenland.de","Povinná pauza u A93: pláž, SUP, okruh 6 km. Stellplatz = nouzový nocleh.","Velké P u Badestrand + oficiální stellplatz, 5 min od dálnice.","Jezero je zatopený hnědouhelný důl — a dřevěná koule na břehu je největší pochozí dřevěná koule světa (40 m).",0,1,1],
+["💦 Höllbachtal (Postfelden)",49.0530,12.3931,355,"P",2,"Z","zdarma","✅","o","https://www.vorderer-bayerischer-wald.de","Divoký potok, balvany, prales — okruh 1,5–2 h, nikde nikdo.","Malé P Postfelden, v týdnu volno.","„Pekelný potok“ — kdysi tu stály mlýny, dnes NPR, kam chodí hlavně místní.",0,2,0],
+["🏛️ Walhalla (Donaustauf)",49.0319,12.2262,365,"H",1,"L","zvenku zdarma, interiér ~4,50 €","✅","o","https://de.wikipedia.org/wiki/Walhalla","Mramorový „Parthenon“ nad Dunajem — výhled od sloupořadí je zdarma.","Velké P pod kopcem, 15 min do schodů.","Síň slávy Ludvíka I. Bavorského — mezi bustami najdeš i Koperníka a Karla IV. by se nedivil.",0,1,0],
+["🏙️ Regensburg",49.0242,12.0993,375,"M",3,"Z","město zdarma","⚠️","o","https://tourismus.regensburg.de","UNESCO staré město, Kamenný most, katedrála. Kafe dne u Dunaje ☕","P Unterer Wöhrd na ostrově — venkovní, Transit OK. Do centra nejezdi.","Kamenný most (1146) byl vzorem pro Karlův most. A Wurstkuchl u mostu je prý nejstarší „fastfood“ světa — klobásky se tu smaží 850 let.",1,1,0],
+["⛰️ Donaudurchbruch + Weltenburg",48.8983,11.8203,420,"S",3,"Z","klášter zdarma, loď VYNECH (~20 €) — jdi pěšky","✅","o","https://www.kloster-weltenburg.de","Dunaj prořezaný vápencovými skalami; stezka z Kelheimu ~5 km.","P Kelheim Volksfestplatz (velké), pak pěšky/na kole podél řeky.","Klášterní pivovar Weltenburg vaří od roku 1050 — nejstarší klášterní pivovar světa. Tmavé Barock Dunkel k obědu na nádvoří.",0,2,0],
+["💦 Eistobel (Grünenbach)",47.6626,9.9895,620,"S",3,"L","~2 €","✅","h","https://de.wikipedia.org/wiki/Eistobel","Kaskády, mísy a tůně řeky Argen — nejlepší 2 € v Allgäu. 2–2,5 h.","P u Argentobelbrücke přímo u vstupu, Transit pohodlně.","Jméno má podle zimy: vodopády zamrzají do ledových varhan. V létě je to zelená džungle.",0,2,0],
+["💦 Scheidegger Wasserfälle",47.5780,9.8360,635,"V",1,"L","~5 €","✅","o","https://de.wikipedia.org/wiki/Scheidegger_Wasserf%C3%A4lle","Dva vodopády s vyhlídkovými plošinami, upravený areál.","P přímo u vstupu.","Vyhlášeno jedním z nejkrásnějších geotopů Bavorska. Když šetříš, stačí Eistobel — je hezčí.",0,1,0],
+["🏰 Lindau – ostrov",47.5465,9.6840,660,"M",3,"Z","město zdarma; stellplatz ~15–20 €/noc","✅","h","https://cs.wikipedia.org/wiki/Lindau","Staré město na ostrově, přístav se lvem a majákem. ZÁKLADNA. Kafe dne na promenádě ☕","Stellplatz Lindau-Reutin: velký, bezpečný, do centra 15 min pěšky / 5 min kolo.","Maják v přístavu je nejjižnější v Německu — a jediný s hodinami. Lev naproti měří 6 m a hledí na Alpy.",1,1,1],
+["🚲 Nonnenhorn / Wasserburg",47.5799,9.6056,668,"J",2,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Nonnenhorn","Nejhezčí kus cyklostezky kolem jezera: vinice, mola, poloostrov Wasserburg.","P u nádraží Nonnenhorn, pak na kolo.","Tady se pěstuje víno na německém břehu Bodensee — vinaři prodávají rovnou ze dvora.",0,1,1],
+["🥾 Pfänder – pěšky z Bregenzu",47.5045,9.7526,672,"P",3,"Z","pěšky zdarma (lanovka ~17 € netřeba)","⚠️","o","https://www.pfaender.at","Výstup ~1,5 h značenou cestou, nahoře výhled na celé jezero.","P u údolní stanice lanovky (venkovní část) nebo dojeď z Lindau na kole.","Z vrcholu je vidět 240 alpských vrcholů a tři země najednou. Dolů to sběhneš za hodinu.",0,3,0],
+["🌊 Rheindelta (Rohrspitz)",47.4940,9.6320,678,"J",3,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Rheindelta","Ústí Rýna do jezera: klidná voda na SUP, rákosí, ptačí ráj, nula turistů.","P Rohrspitz u přístaviště, volné plochy.","Rýn sem byl uměle přeložen r. 1900 obřím kanálem — delta kolem je dnes největší rakouská mokřadní rezervace.",0,1,1],
+["🏰 Meersburg – jen město",47.6940,9.2700,700,"M",2,"Z","uličky zdarma (hrad ~16 € vynech)","⚠️","o","https://www.meersburg.de","Hrázděné uličky nad jezerem, vinice, promenáda. Hrad stačí zvenku.","P nad městem (Allmendweg) — plní se; přijeď do 9:30.","Na hradě dožila básnířka Annette von Droste-Hülshoff — nejslavnější německá básnířka, bývala na bankovce 20 DM.",1,1,0],
+["🏘️ Pfahlbauten Unteruhldingen",47.7230,9.2260,705,"H",2,"P","~12 €","✅","o","https://www.pfahlbauten.de","Rekonstrukce pravěké kůlové vesnice na vodě (UNESCO).","Velké návštěvnické P u areálu.","Skutečné kůly pod hladinou jsou staré až 6 000 let — proto je to UNESCO. Dobrý plán na déšť, jinak postradatelné.",1,1,0],
+["🏙️ Konstanz",47.6760,9.1780,715,"M",3,"Z","město zdarma","⚠️","o","https://www.konstanz-tourismus.de","Největší město na jezeře, staré uličky, přístav se sochou Imperia.","Jen P+R Bodenseeforum, dál pěšky/MHD.","Česká stopa: právě tady (Kostnice!) byl 1415 souzen a upálen Jan Hus. Husův dům s expozicí stojí dodnes — vstup za pár eur.",1,1,0],
+["🏘️ Stein am Rhein",47.6600,8.8600,740,"M",2,"Z","zdarma","⚠️","h","https://cs.wikipedia.org/wiki/Stein_am_Rhein","Náměstí s malovanými fasádami — nejzachovalejší středověké městečko CH. Kafe dne ☕","P Schiffländi u řeky; přijeď do 9:00, pak plno.","Každý dům na náměstí má jméno podle svého fresky: U slunce, U bílé orlice… Malby jsou staré až 500 let.",1,1,0],
+["🏄 SUP Rýn: Stein a. R. → Diessenhofen",47.6890,8.7490,745,"J",3,"Z","SUP zdarma, vlak zpět ~5 CHF","✅","h","https://cs.wikipedia.org/wiki/R%C3%BDn","Splutí tyrkysového Rýna ~2 h po proudu, zpět vlakem podél řeky.","Auto nech ve Stein am Rhein (P Schiffländi), vylez u mostu v Diessenhofenu.","Rýn je tu tak čistý, že místní vodu běžně pijí. Proud tě nese sám — nejlevnější „výletní plavba“ Švýcarska.",0,2,1],
+["💦 Rheinfall (severní břeh!)",47.6775,8.6154,755,"V",2,"L","severní břeh zdarma; plošiny ~5 CHF","✅","h","https://rheinfall.ch","Největší vodopád Evropy: 150 m šířka, 23 m výška.","Trik: parkuj na severním břehu (Neuhausen, Rheinfallquai) — výhled zdarma. P u Schloss Laufen je placené.","Goethe sem jezdil opakovaně a pokaždé si zapsal, že to slovy nejde popsat. 600 000 litrů za sekundu.",1,1,0],
+["🏰 Schaffhausen + Munot",47.6970,8.6380,758,"M",3,"Z","pevnost Munot zdarma","✅","h","https://www.munot.ch","Kruhová pevnost ve vinicích s výhledem na Rýn, staré město pod ní. ZÁKLADNA.","Stellplatz u Rýna (Rheinuferstrasse), do města pěšky.","Munot je postaven podle nákresů Albrechta Dürera — a dodnes v něm bydlí strážce, který každý večer v 21:00 zvoní na zvon.",1,1,0],
+["📚 St. Gallen – knihovna",47.4232,9.3770,720,"H",3,"P","knihovna ~18 CHF, areál zdarma","⚠️","o","https://www.stiftsbezirk.ch","Nejkrásnější barokní knihovna světa (UNESCO), klášterní čtvrť.","P+R na okraji (Athletik Zentrum), do centra pár minut.","Nad vchodem je řecky napsáno „Lékárna duše“. Uvnitř leží 2700 let stará egyptská mumie. Jen pokud lije celý den — 18 CHF.",1,1,0],
+["🏙️ Appenzell",47.3310,9.4090,730,"M",2,"Z","zdarma","✅","o","https://cs.wikipedia.org/wiki/Appenzell","Vesnice s malovanými štíty, sýrové krámy. Kafe + kousek appenzelleru ☕","Velké P na kraji obce (Postplatz/Brauerei).","Do roku 1990 tu ženy nesměly kantonálně volit — hlasuje se dodnes na náměstí zvednutím ruky (Landsgemeinde).",1,1,0],
+["💦 Seerenbachfälle (z Weesenu)",47.1235,9.1266,770,"V",3,"Z","zdarma","⚠️","o","https://de.wikipedia.org/wiki/Seerenbachf%C3%A4lle","Tři stupně vodopádů, celkem 585 m — jedny z nejvyšších v Evropě.","Silnička do Betlis je úzká: parkuj ve Weesenu (P u přístavu) a jdi 1 h po břehu.","Pod vodopádem vyvěrá Rinquelle — pramen, který chrlí vodu z jeskynního systému, kam se potápěči dostali 1 km hluboko.",0,2,0],
+["🥾 Quinten (Walensee)",47.1300,9.2114,775,"P",3,"Z","pěšky zdarma (loď zpět ~10 CHF volitelně)","✅","o","https://de.wikipedia.org/wiki/Quinten","Vesnička bez aut pod stěnami Churfirsten, „švýcarské Středomoří“.","P Weesen u přístavu, pak 1,5 h pěšky po slunečném břehu.","Díky mikroklimatu tu rostou fíky, kiwi a palmy — na 47. rovnoběžce. Vinaři vozí úrodu lodí, silnice sem nevede.",0,2,1],
+["🏰 Rapperswil",47.2260,8.8180,800,"H",2,"Z","hrad zvenku + most zdarma","⚠️","o","https://cs.wikipedia.org/wiki/Rapperswil","Město růží: hrad nad jezerem a nejdelší dřevěný most CH (841 m).","P+R Grünfeld na okraji, do centra 10 min.","Na hradě je Polské muzeum — za dělení Polska tu emigranti 100 let opatrovali urnu se srdcem Kościuszka.",1,1,1],
+["⛪ Einsiedeln – bazilika",47.1260,8.7520,815,"H",2,"Z","bazilika zdarma","✅","o","https://www.kloster-einsiedeln.ch","Největší barokní chrám Švýcarska s Černou madonou. Nejlepší „muzeum za nic“.","Velká P zvyklá na autobusy, kousek od kláštera.","Černá madona přežila požáry i Napoleona — vojáci ji 1798 hledali, mniši ji ale propašovali v seně do Tyrol.",1,1,0],
+["🌊 Lauerzersee",47.0320,8.5940,835,"J",3,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Lauerzersee","Teplé jezírko pod Rigi s ostrůvkem Schwanau — na SUPu ho obepluješ.","P u Seebad Lauerz.","Na Schwanau stojí zřícenina a kaplička; podle legendy tu straší dcera rytíře, kterou unesl pán hradu. Každý rok „hoří“ při vzpomínkové slavnosti.",0,1,1],
+["🔴 Stoos (lanovka) – vynech",46.9884,8.6302,840,"P",4,"D","~30+ CHF","✅","v","https://www.stoos.ch","Nejstrmější pozemní lanovka světa + hřebenovka Fronalpstock.","P u údolní stanice Schlattli.","Vagóny se otáčejí jak sudy, aby podlaha zůstala vodorovná — sklon až 110 %. Krásné, ale za tvoje franky ne.",0,2,0],
+["🔴 Rigi (zubačka) – vynech",47.0490,8.5490,845,"P",4,"D","~70 CHF zpáteční","✅","v","https://www.rigi.ch","„Královna hor“ — panorama jezer a Alp.","Velké P Arth-Goldau u zubačky.","První horská železnice Evropy (1871). Mark Twain výstup prospal a východ slunce si spletl se západem — celá kapitola v Tulákovi po Evropě.",0,2,0],
+["🥾 Hohle Gasse (Küssnacht)",47.0800,8.4494,850,"H",1,"Z","zdarma","✅","o","https://www.hohlegasse.ch","Legendární úvozová cesta s kaplí — 45 min procházka.","P u Gesslerburg / značené P Hohle Gasse.","Přesně tady podle Schillera Vilém Tell sestřelil fojta Gesslera. Že Tell nejspíš nikdy nežil? Švýcarům to neříkej.",1,1,0],
+["🥾 Rütli – pěšky ze Seelisbergu",46.9690,8.5943,855,"P",3,"Z","pěšky zdarma","⚠️","o","https://de.wikipedia.org/wiki/R%C3%BCtli","Louka nad jezerem, kde 1291 vzniklo Švýcarsko. Stezka Weg der Schweiz.","P Seelisberg/Bauen, dál pěšky (loď z Brunnenu stojí peníze).","Každý švýcarský kanton má na stezce Weg der Schweiz svůj úsek — délka podle počtu obyvatel. Celá stezka = celé Švýcarsko v miniatuře.",0,2,0],
+["🏙️ Lucern (P+R)",47.0333,8.3064,860,"M",3,"Z","město i Lví památník zdarma","❌","h","https://www.luzern.com","Kapellbrücke (1333), hradby Musegg, umírající lev. Vše zdarma.","JEN P+R Allmend/Messe, do centra vlakem 3 min. S Transitem do města nejezdi.","Lví památník označil Mark Twain za „nejsmutnější kus kamene na světě“. Most Kapellbrücke 1993 vyhořel — co vidíš, je z poloviny replika.",1,1,0],
+["🌊 Alpnachersee",46.9580,8.2830,870,"J",2,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Alpnachersee","Klidné rameno Lucernského jezera — SUP bez výletních lodí.","P u Alpnachstad (u nádraží).","Z vody koukáš na trať Pilatusbahn — nejstrmější zubačku světa (48 %). Jezdit nemusíš, stačí vědět, že tam je.",0,1,1],
+["🥾 Glaubenbielen – rašeliniště",46.7940,8.0960,885,"P",3,"Z","zdarma","⚠️","o","https://www.biosphaere.ch","Dřevěné chodníky přes největší rašeliniště CH, biosféra UNESCO. Ticho.","Malá P u silnice na sedle; silnice úzká v serpentinách — jeď mimo špičku.","Entlebuch je „švýcarská Aljaška“ — kraj tak chudý a divoký, že si z něj Švýcaři dělali legraci. Dnes chráněný poklad.",0,2,0],
+["⛰️ Aareschlucht (Meiringen)",46.7237,8.2029,905,"S",2,"P","~12 CHF","✅","h","https://www.aareschlucht.ch","1,4 km lávek nad tyrkysovou Aarou sevřenou 200m stěnami.","Vlastní velké P u západního vstupu.","Jediné vstupné, které doporučuju: soutěsku vybrousila ledovcová voda a lávky visí nad ní od roku 1888. Funguje i za deště — tvoje „muzeum dne“.",1,1,0],
+["💦 Reichenbachfälle – pěšky",46.7160,8.1830,907,"V",2,"Z","stezka zdarma (lanovka ~12 CHF netřeba)","✅","o","https://de.wikipedia.org/wiki/Reichenbachfall","Na vyhlídku vede stezka ~30 min do kopce.","P u údolní stanice historické lanovky.","Tady Conan Doyle 1893 „zabil“ Sherlocka Holmese v souboji s Moriartym. Čtenáři nosili smuteční pásky, Doyle ho musel oživit. Na skále je deska.",0,2,0],
+["⛰️ Rosenlauischlucht",46.6659,8.1519,913,"S",3,"L","~8 CHF","⚠️","o","https://www.rosenlauischlucht.ch","Divočejší a prázdnější sestra Aareschlucht.","Horská silnice z Meiringenu je úzká — jeď pomalu, míjecí místa. P u vstupu.","Stěny vyleštil ledovec do vln a spirál (Gletscherschliff). Plať jen jednu soutěsku: buď tuhle, nebo Aareschlucht.",0,2,0],
+["🌊 Brienz – jezero",46.7560,8.0300,918,"J",3,"Z","břeh a SUP zdarma","✅","h","https://www.brienz-tourismus.ch","Nejtyrkysovější jezero CH. SUP ráno za bezvětří. ZÁKLADNA. Kafe na dřevěné promenádě ☕","Kemp/stellplatz Brienz u jezera; přes den P Seefeld.","Brienz je vesnice řezbářů — místní škola řezbářství je jediná v CH. Barvu jezeru dává ledovcová „mouka“ z Aary.",0,1,1],
+["💦 Giessbachfälle ⭐",46.7350,7.9860,923,"V",3,"Z","zdarma (funikulár netřeba)","✅","h","https://www.giessbach.ch","14 kaskád padajících 500 m do jezera + pohádkový grandhotel.","P Giessbach nad hotelem, pak 20 min pěšky dolů. Nebo připluj na SUPu z Brienzu.","Funikulár k hotelu (1879) je nejstarší v Evropě. Hotel měl být zbourán a nahrazen betonem — zachránil ho aktivista Franz Weber celonárodní sbírkou.",0,1,1],
+["🏄 Iseltwald",46.7100,7.9650,927,"J",1,"L","molo ~5 CHF, břeh zdarma","⚠️","o","https://de.wikipedia.org/wiki/Iseltwald","Rybářská vesnička na výběžku do jezera.","P na kraji obce (placené), dál pěšky.","Molo proslavil korejský seriál Crash Landing on You — jezdí sem tolik fanoušků, že obec dala na molo turniket za 5 CHF. Břeh vedle je zdarma a stejný.",0,1,1],
+["🥾 Schynige Platte – vynech",46.6630,7.8680,938,"P",4,"D","zubačka ~71 CHF","✅","v","https://www.jungfrau.ch/de-ch/schynige-platte","Historická zubačka + alpská botanická zahrada.","P Wilderswil u nádraží.","V zahradě roste 700 druhů alpských květin. Krása — ale 71 CHF je půlka tvého týdenního rozpočtu na jídlo.",0,1,0],
+["🕳️ St. Beatus-Höhlen – zvenku",46.6870,7.7820,942,"K",2,"D","jeskyně ~20 CHF; kaskády před vstupem zdarma","⚠️","o","https://www.beatushoehlen.swiss","Kaskády a terasa s výhledem na Thunersee jsou zdarma.","P omezené u silnice; líp busem z Interlakenu nebo lodí.","Podle legendy v jeskyni žil drak, kterého vyhnal irský mnich Beatus — první „turista“ Švýcarska (6. století). Dovnitř jen za lijáku a s franky navíc.",1,1,0],
+["🥾 Niederhorn – pěšky",46.7000,7.7910,946,"P",4,"Z","pěšky zdarma (lanovka ~40 CHF netřeba)","✅","o","https://www.niederhorn.ch","Výstup z Beatenbergu ~2 h, hřeben s výhledem na Thunersee.","P Beatenberg u stanice lanovky.","Za soumraku na hřebeni potkáš kozorožce — chodí sem lízat sůl. Drž odstup, fotky vyjdou i tak.",0,3,0],
+["💦 Staubbachfall ⭐",46.5965,7.9074,947,"V",2,"Z","zdarma","⚠️","h","https://www.lauterbrunnen.swiss","297 m volného pádu přímo nad vesnicí + stezka ZA vodopád.","P Lauterbrunnen (velké, placené) — v srpnu do 8:30!","Vodopád inspiroval Goetha k básni Gesang der Geister über den Wassern. Údolí se 72 vodopády inspirovalo i Tolkienovu Roklinku.",0,1,0],
+["💦 Trümmelbachfälle",46.5703,7.9106,949,"V",2,"P","~14 CHF","⚠️","o","https://truemmelbachfaelle.ch","Deset ledovcových vodopádů UVNITŘ hory — výtah ve skále.","P u vstupu (menší) nebo pěšky/na kole z Lauterbrunnenu.","Jediné zpřístupněné podzemní ledovcové vodopády Evropy: 20 000 l/s odvodňuje stěny Eigeru, Möncha a Jungfrau. Duní to jak turbína.",1,1,0],
+["🔴 Gletscherschlucht Grindelwald – vynech",46.6132,8.0446,952,"S",2,"D","~21 CHF","✅","v","https://www.grindelwald.swiss","Ledovcová rokle se skleněnou sítí „Spiderweb“ nad propastí.","P u vstupu.","Pěkné, ale 21 CHF za rokli, když máš Aareschlucht za 12 a Jogne zdarma? Škrt.",1,1,0],
+["🔴 Bachalpsee / First – vynech",46.6698,8.0230,956,"P",4,"D","lanovka ~68 CHF","✅","v","https://www.jungfrau.ch","Zrcadlové jezero s odrazem Schreckhornu.","P Grindelwald u lanovky First.","Nejfotografovanější jezero CH. Zrcadlení máš ale zdarma na Taney a Salanfe — a bez fronty na kabinu.",0,2,0],
+["🌊 Spiez + Oberhofen zvenku",46.6863,7.6805,962,"J",3,"Z","nábřeží a exteriéry zdarma","✅","o","https://www.spiez.ch","Vinařský záliv, hrad nad přístavem; kousek dál Oberhofen s věží ve vodě.","P Spiez Bucht u lida/jezera.","Hrad Oberhofen má ložnici v tureckém stylu a věžičku stojící přímo v jezeře — nejfotogeničtější hrad Thunersee, zvenku zdarma.",0,1,1],
+["🔵 Blausee",46.5320,7.6650,978,"J",1,"L","~10 CHF","✅","v","https://www.blausee.ch","Malé lesní jezírko nepřirozeně modré barvy.","P u silnice B11.","Legenda: barvu mu daly oči dívky, která se utopila žalem. Hezké, malé, drahé — snadný škrt.",1,1,0],
+["🥾 Oeschinensee – pěšky ⭐",46.4938,7.6828,985,"P",4,"Z","pěšky zdarma (lanovka ~30 CHF netřeba); P ~8 CHF/den","✅","o","https://www.oeschinensee.ch","Modré jezero pod 2000m stěnami (UNESCO). Výstup lesem 1,5 h.","Velké P Kandersteg u lanovky.","Jezero nemá povrchový odtok — voda mizí puklinami ve skále. SUP zakázán, koupání ledové, výhled zadarmo.",0,3,0],
+["💦 Cholerenschlucht (Adelboden)",46.5065,7.5623,992,"S",2,"Z","zdarma","✅","o","https://www.adelboden.ch","Žebříky a lávky nad divokým potokem — skoro nikdo ji nezná.","P Unter dem Birg / u vstupu dle značení.","Soutěsku vymlel potok Allenbach do tvaru přesýpacích hodin. Chce jistý krok — a je celá zadarmo.",0,2,0],
+["🏰 Gruyères",46.5830,7.0820,1035,"H",3,"Z","městečko zdarma (hrad ~12, Giger ~12,5 volitelně)","✅","h","https://www.la-gruyere.ch","Hradní městečko na kopci + sýrárna La Maison du Gruyère (~8 CHF s ochutnávkou).","Velká P pod městem (P1/P2), nahoru 5 min pěšky.","V idylickém středověkém městečku sídlí muzeum H. R. Gigera — tvůrce Vetřelce. Bar vedle má strop z „obratlů“. Nejdivnější kontrast Švýcarska.",1,1,0],
+["⛰️ Gorges de la Jogne ⭐",46.6039,7.1005,1038,"S",3,"Z","zdarma","✅","h","https://www.la-gruyere.ch","Lávky, tunýlky, tyrkysová řeka — a skoro nikdo. Start u čokoládovny Cailler.","P u Cailler v Brocu (velké, zdarma).","Čokoládovna Cailler (1819) je nejstarší v CH — exkurze 17 CHF ale klidně vynech, obchod s ochutnávkou je zdarma 😉",0,2,0],
+["🌊 Lac de la Gruyère – Île d'Ogoz ⭐",46.6772,7.0956,1046,"J",3,"Z","zdarma","✅","h","https://www.ogoz.ch","Na SUPu k ostrůvku se zříceninou a kaplí. Nejlepší SUP celé trasy.","P Le Bry (u dálničního sjezdu), k vodě pár minut.","Ostrov býval kopec nad vesnicí — údolí zatopila přehrada Rossens 1948. Kaple z 13. století zůstala a pluje nad hladinou.",0,1,1],
+["⛰️ Gorges de l'Areuse",46.9560,6.7280,1095,"S",3,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Areuse","Stezka podél řeky 11 km (Noiraigue→Boudry), zpět vlakem.","P Noiraigue u nádraží.","Kamenný obloukový můstek Saut de Brot (1889) je jedno z nejfotografovanějších míst Jury. Jen při pomalém tempu — je to zajížďka.",0,2,0],
+["🚲 Lavaux – vinice ⭐",46.4700,6.7950,1080,"P",3,"Z","zdarma","❌","h","https://www.lavaux-unesco.ch","UNESCO terasy nad jezerem: na kole Vevey→Lutry ~11 km. Kafe dne v St-Saphorin ☕","Dodávku nech ve Vevey (P+R) nebo Villeneuve — do vesniček s Transitem nejezdi.","Vinaři říkají, že Lavaux zraje pod „třemi slunci“: tím na obloze, odrazem od jezera a teplem kamenných zdí. Terasy stavěli mniši od 11. století.",0,1,0],
+["⛰️ Gorges du Chauderon",46.4370,6.9050,1088,"S",3,"Z","zdarma","⚠️","o","https://www.montreuxriviera.com","Divoká rokle začínající 5 min od centra Montreux — málokdo o ní ví.","Auto nech ve Villeneuve, do Montreux vlakem/kolem; vstup z Les Planches.","Stará mulí stezka roklí byla stovky let jedinou cestou z Montreux do hor. Dnes: kapradí, vodopádky a ticho hned nad jazzovým městem.",0,2,0],
+["🔴 Rochers-de-Naye – vynech",46.4322,6.9762,1090,"P",4,"D","zubačka ~60+ CHF","✅","v","https://journey.mob.ch","Vyhlídka nad celým Ženevským jezerem, sviští kolonie.","—","Nahoře žijí svišti ve výběhu i volně. Výhled na jezero ale máš zdarma z Chauderon a Taney.",0,1,0],
+["🏰 Château de Chillon – zvenku",46.4142,6.9273,1093,"H",2,"P","exteriér a nábřeží zdarma; interiér ~15 CHF","⚠️","h","https://www.chillon.ch","Vodní hrad na skále v jezeře — nejfotogeničtější zvenku od vody.","P Villeneuve, pak 10 min na kole po břehu.","Lord Byron si 1816 vyryl jméno do sloupu v podzemí a napsal Vězně chillonského — o mnichovi 6 let přikovaném ke sloupu. Rytina tam je dodnes.",1,1,0],
+["🅿️ Villeneuve – základna",46.3980,6.9260,1095,"T",0,"Z","parkování dle místa","✅","h","https://www.montreuxriviera.com","Nejlepší flek pro dodávku u Ženevského jezera. Odsud na kole: Chillon, Montreux, Lavaux.","Rovinaté P u jezera a kemp Les Horizons Bleus; klidnější než Montreux.","Ve vedlejším Vevey prožil posledních 25 let Charlie Chaplin — jeho socha stojí na nábřeží s výhledem, který si vybral k žití.",1,1,1],
+["🥾 Lac de Taney ⭐",46.3487,6.8330,1112,"P",4,"Z","zdarma","⚠️","o","https://de.wikipedia.org/wiki/Lac_de_Taney","Horské jezero v kotlině nad Ženevským jezerem, výstup 1,5 h.","Silnička do Le Flon je úzká — parkuj dole ve Vouvry a šlapej odtud.","U jezera stojí osada bez aut, kam si chataři vozí zásoby lanovkou na batohy. Zrcadlení Grammontu = tvoje „Bachalpsee zdarma“.",0,3,0],
+["⛪ Saint-Maurice – bazilika",46.2186,7.0035,1122,"H",3,"L","bazilika zdarma; poklad/jeskyně ~12 CHF volitelně","✅","h","https://www.abbaye-stmaurice.ch","Opatství pod skalní stěnou + Grotte aux Fées s podzemním vodopádem.","P u opatství / P des Glariers.","Mniši se tu modlí nepřetržitě od roku 515 — přes 1500 let, nejdéle v západní Evropě. Klášterní poklad patří k nejcennějším na světě.",1,1,0],
+["💦 Pissevache + Gorges du Trient",46.1360,7.0380,1132,"V",2,"Z","Pissevache zdarma; soutěska malé vstupné","✅","h","https://www.vallee-du-trient.ch","116m vodopád volně u silnice + 200 m hluboká skalní puklina.","P přímo u vodopádu i u soutěsky.","Jméno znamená doslova „čůrající kráva“ — a obdivoval ho i Goethe na cestě do Itálie. Valaisané mají poezii svého druhu.",0,1,0],
+["🥾 Lac de Salanfe ⭐",46.1420,6.9660,1138,"P",4,"Z","zdarma (P Van d'en Haut ~5 CHF)","⚠️","o","https://www.salanfe.ch","Náhorní jezero pod Dents du Midi, výstup 1,5–2 h, hospoda u hráze.","Silnice do Van d'en Haut úzká se serpentinami — jeď pomalu, nebo parkuj v Salvanu.","Z hráze vidíš Dents du Midi „zezadu“ — sedm zubů, na které budeš z Châtelu koukat zepředu. Kruh se uzavírá.",0,3,0],
+["🚐 Martigny – servis",46.1030,7.0720,1146,"T",2,"Z","město zdarma","✅","h","https://www.martigny.com","Poslední velký nákup (Lidl/Denner) a NAFTA před Francií. Římské památky po cestě.","Velká P u supermarketů a u amfiteátru.","Martigny je římské Octodurus — má amfiteátr zdarma. A v Barrylandu chovají bernardýny: legendární Barry zachránil přes 40 lidí.",1,1,0],
+["⛰️ Galerie Défago (Champéry) ⭐",46.1755,6.8700,1158,"S",2,"Z","zdarma","✅","h","https://www.regiondentsdumidi.ch","Lávka vytesaná ve skalní stěně nad soutěskou Vièze — už ve tvém údolí.","P Champéry (normální venkovní), ke vstupu pár minut.","Historickou stezku vysekali do stěny hoteliéři v 19. století, aby hostům ukázali divočinu. Obnovená, zábradlí nové, adrenalin původní.",0,2,0],
+["🏁 CÍL: Châtel",46.2692,6.8405,1180,"T",0,"T","–","✅","t","https://www.chatel.com","Vítej! Portes du Soleil: 600 km tras pro kolo, propojených vleky přes 2 země.","Châtel má velká letní P u vleků (Linga, Pré-la-Joux).","Z Châtelu se dá na kole objet celý okruh Portes du Soleil přes Švýcarsko a zpět — pas na vleky si kupuje i parta, co „nejezdí vleky“. Uvidíš 😉",0,2,0]
+];
+const P = D.map((r,i)=>({i,n:r[0],la:r[1],lo:r[2],km:r[3],t:r[4],d:r[5],c:r[6],v:r[7],dod:r[8],p:r[9],w:r[10],tx:r[11],pk:r[12],f:r[13],rain:r[14],e:r[15],sup:r[16]}));
+
+// route corridor for map + ribbon
+const ROUTE=[[15.758,50.332],[15.83,50.21],[14.55,50.09],[14.36,50.01],[13.40,49.72],[12.55,49.67],[12.158,49.273],[12.10,49.01],[11.85,48.80],[11.40,48.12],[10.18,47.98],[9.69,47.55],[9.61,47.58],[9.43,47.51],[9.38,47.565],[8.90,47.60],[8.615,47.678],[8.52,47.38],[8.05,47.39],[7.44,46.95],[7.15,46.80],[6.84,46.46],[6.91,46.43],[6.97,46.32],[6.94,46.25],[6.917,46.228],[6.853,46.237],[6.8405,46.2692]];
+
+// ---------- STATE ----------
+const store={
+  async get(k){ try{ if(window.storage&&window.storage.get) return await window.storage.get(k); }catch(e){}
+    try{ const v=localStorage.getItem(k); return v?{key:k,value:v}:null; }catch(e){ return null; } },
+  async set(k,v){ try{ if(window.storage&&window.storage.set) return await window.storage.set(k,v); }catch(e){}
+    try{ localStorage.setItem(k,v); return {key:k,value:v}; }catch(e){ return null; } }
+};
+let S={pos:0,st:{},notes:{},bud:[],vis:{},walkKm:0,driveKm:0};
+async function load(){try{const r=await store.get("vandrbuch-v1");if(r&&r.value)S=Object.assign(S,JSON.parse(r.value));}catch(e){}if(!S.vis)S.vis={};if(!S.walkKm)S.walkKm=0;if(!S.driveKm)S.driveKm=0;}
+let saveT=null;
+function save(){clearTimeout(saveT);saveT=setTimeout(async()=>{try{await store.set("vandrbuch-v1",JSON.stringify(S));}catch(e){console.error(e);}},400);}
+
+// ---------- HELPERS ----------
+const $=s=>document.querySelector(s);
+function cvar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function colOf(pl,mode){
+  if(mode==="t")return cvar(TYP[pl.t][1]);
+  if(mode==="c")return cvar(CEN[pl.c][1]);
+  const dc=["#9A9282","#5E8C61","#C9A227","#D96C3F","#6E8CA0"];return dc[pl.d];
+}
+function nav(pl){return "https://www.google.com/maps/dir/?api=1&destination="+pl.la+","+pl.lo;}
+function foto(pl){return "https://www.google.com/search?tbm=isch&q="+encodeURIComponent(pl.n.replace(/^[^\s]+\s/,""));}
+function windy(pl){return "https://www.windy.com/?"+pl.la+","+pl.lo+",11";}
+function stIcon(i){return {v:"⭐",w:"🕐",x:"✖"}[S.st[i]]||"";}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function nm(p){return p.n.replace(/^\S+\s/,"");}
+function dodTag(p){if(p.dod.startsWith("✅"))return '<span class="tag2 ok">transit ok</span>';if(p.dod.startsWith("⚠"))return '<span class="tag2 warn">transit pozor</span>';return '<span class="tag2 no">bez dodávky</span>';}
+
+// ---------- RIBBON ----------
+function drawRibbon(){
+  const svg=$("#ribbon");const max=1180;
+  const seg=[[0,620,"A","#6E8CA0"],[620,860,"B","#4FA3A0"],[860,1035,"C","#7C8B6F"],[1035,1180,"D","#C2914F"]];
+  let h='';
+  seg.forEach(s=>{const x1=s[0]/max*980+10,x2=s[1]/max*980+10;
+    h+='<rect x="'+x1+'" y="20" width="'+(x2-x1-2)+'" height="8" rx="4" fill="'+s[3]+'"/>';
+    h+='<text x="'+((x1+x2)/2)+'" y="14" text-anchor="middle" font-size="10" font-family="monospace" fill="#8A8272">'+s[2]+'</text>';});
+  const cur=P[S.pos]||P[0];const x=cur.km/max*980+10;
+  h+='<g stroke="#2E2A23" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-van" x="'+(x-9)+'" y="27" width="18" height="18"/></g>';
+  h+='<text x="990" y="42" text-anchor="end" font-size="9" font-family="monospace" fill="#8A8272">'+cur.km+' / 1180 km</text>';
+  svg.innerHTML=h;
+}
+
+// ---------- MAP ----------
+let mapMode="t";
+function drawMap(){
+  const svg=$("#map");const W=1000,H=640,pad=30;
+  const lats=P.map(p=>p.la),lngs=P.map(p=>p.lo);
+  const mnLa=Math.min(...lats)-.15,mxLa=Math.max(...lats)+.15,mnLo=Math.min(...lngs)-.2,mxLo=Math.max(...lngs)+.2;
+  const X=lo=>pad+(lo-mnLo)/(mxLo-mnLo)*(W-2*pad);
+  const Y=la=>pad+(mxLa-la)/(mxLa-mnLa)*(H-2*pad);
+  let h='<polyline points="'+ROUTE.map(c=>X(c[0]).toFixed(1)+","+Y(c[1]).toFixed(1)).join(" ")+'" fill="none" stroke="#CDBFA3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+  P.forEach(p=>{
+    const col=colOf(p,mapMode);
+    h+='<circle cx="'+X(p.lo).toFixed(1)+'" cy="'+Y(p.la).toFixed(1)+'" r="8" fill="'+col+'" stroke="#fff" stroke-width="1.6" data-i="'+p.i+'" style="cursor:pointer"/>';
+  });
+  const cur=P[S.pos]||P[0];
+  h+='<g stroke="#2E2A23" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-van" x="'+(X(cur.lo)-11)+'" y="'+(Y(cur.la)-28)+'" width="22" height="22"/></g>';
+  svg.innerHTML=h;
+  svg.querySelectorAll("circle").forEach(c=>c.addEventListener("click",()=>openCard(+c.dataset.i)));
+  // legend
+  let L="";
+  if(mapMode==="t")for(const k in TYP)L+='<span><i style="background:'+cvar(TYP[k][1])+'"></i>'+TYP[k][0]+'</span>';
+  else if(mapMode==="c")for(const k in CEN)L+='<span><i style="background:'+cvar(CEN[k][1])+'"></i>'+CEN[k][0]+'</span>';
+  else DEL.forEach((d,i)=>{const dc=["#9A9282","#5E8C61","#C9A227","#D96C3F","#6E8CA0"];L+='<span><i style="background:'+dc[i]+'"></i>'+d+'</span>';});
+  $("#legend").innerHTML=L;
+}
+
+// ---------- CARD ----------
+function openCard(i){
+  const p=P[i];
+  const near=P.filter(q=>q.i!==i&&q.p!=="t").map(q=>({q,d2:Math.pow(q.la-p.la,2)+Math.pow((q.lo-p.lo)*0.7,2)})).sort((a,b)=>a.d2-b.d2).slice(0,3);
+  let btns='<a class="btn p" target="_blank" rel="noopener" href="'+nav(p)+'">🧭 Navigovat</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="'+p.w+'">🌐 Web</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="'+foto(p)+'">📷 Fotky</a>';
+  if(p.sup)btns+='<a class="btn g" target="_blank" rel="noopener" href="'+windy(p)+'">💨 Vítr (Windy)</a>';
+  $("#mInner").innerHTML=
+    '<h2>'+esc(nm(p))+'</h2>'
+    +'<div style="margin-top:6px"><span class="badge" style="background:'+cvar(TYP[p.t][1])+'">'+TYP[p.t][0].replace(/^\S+\s/,"")+'</span>'
+    +'<span class="badge" style="background:'+cvar(CEN[p.c][1])+'">'+CEN[p.c][0].replace(/^\S+\s/,"")+'</span>'
+    +'<span class="badge" style="background:#8A8272">'+DEL[p.d]+'</span></div>'    +'<div class="kv">Co tam uvidíš</div><p style="font-size:14px">'+esc(p.tx)+'</p>'
+    +'<div class="kv">Vstup</div><p style="font-size:13.5px">'+esc(p.v)+'</p>'
+    +'<div class="fact">💡 '+esc(p.f)+'</div>'
+    +'<div class="park"><b>'+(p.dod.startsWith("✅")?"Transit OK":p.dod.startsWith("⚠")?"Transit – pozor":"Bez dodávky")+'</b> · '+esc(p.pk)+'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS '+p.la+', '+p.lo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
+    +'<div class="kv">Kde to je</div>'
+    +'<a class="mini" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"><iframe src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z=11&output=embed&hl=cs" loading="lazy" title="mapa"></iframe><span class="minihint">ťukni → detail v Google Maps</span></a>'
+    +'<div class="kv">V okolí</div><div class="chips">'+near.map(o=>'<button class="chip nearb" data-i="'+o.q.i+'">'+esc(nm(o.q))+'</button>').join("")+'</div>'
+    +'<div class="actions">'+btns+'</div>'
+    +'<div class="kv" style="margin-top:14px">Návštěva</div>'
+    +'<button class="btn '+(S.vis[i]?"p":"g")+'" id="visBtn" style="width:100%">'+(S.vis[i]?"✔ Navštíveno — ťukni pro zrušení":"✔ Check-in: jsem tady")+'</button>'
+    +'<div class="kv">Moje preference</div>'
+    +'<div class="stbtns">'
+    +'<button data-s="v" '+(S.st[i]==="v"?'class="on"':'')+'>⭐ Určitě chci</button>'
+    +'<button data-s="w" '+(S.st[i]==="w"?'class="on"':'')+'>🕐 Když bude čas</button>'
+    +'<button data-s="x" '+(S.st[i]==="x"?'class="on"':'')+'>✖ Spíš ne</button></div>'
+    +'<div class="kv">Poznámka</div><textarea id="pNote" rows="2" placeholder="např. parkoviště plné v 10:00…">'+(S.notes[i]||"")+'</textarea>'
+    +'<div class="actions"><button class="btn g" id="setHere"><svg><use href="#i-van"/></svg>Jen nastavit pozici</button><button class="btn g" id="closeM">Zavřít</button></div>';
+  $("#ov").classList.add("on");$("#modal").classList.add("on");
+  $("#mInner").querySelectorAll(".stbtns button").forEach(b=>b.addEventListener("click",()=>{
+    S.st[i]=(S.st[i]===b.dataset.s)?undefined:b.dataset.s;save();openCard(i);renderAll();
+  }));
+  $("#pNote").addEventListener("input",e=>{S.notes[i]=e.target.value;save();});
+  $("#mInner").querySelectorAll(".nearb").forEach(b=>b.addEventListener("click",()=>openCard(+b.dataset.i)));
+  $("#visBtn").addEventListener("click",()=>{if(S.vis[i]){delete S.vis[i];}else{S.vis[i]=Date.now();S.pos=i;$("#posSel").value=i;}save();drawRibbon();drawMap();renderAll();openCard(i);});
+  $("#setHere").addEventListener("click",()=>{S.pos=i;$("#posSel").value=i;save();drawRibbon();drawMap();renderNow();closeM();});
+  $("#closeM").addEventListener("click",closeM);
+}
+function closeM(){$("#ov").classList.remove("on");$("#modal").classList.remove("on");}
+$("#ov").addEventListener("click",closeM);
+
+// ---------- CO TEĎ ----------
+let fTime=2,fWx="sun",fNrg=2;
+function chip(elId,cb){$( "#"+elId).querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+  $("#"+elId).querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset.v);}));}
+function renderNow(){
+  const my=P[S.pos]||P[0];
+  let cand=P.filter(p=>p.p!=="t"&&p.p!=="v"&&p.i!==S.pos);
+  cand=cand.filter(p=>fTime===2?p.d<=2:fTime===3?p.d<=3:true);
+  if(fWx==="rain")cand=cand.filter(p=>p.rain);
+  cand=cand.filter(p=>p.e<=fNrg);
+  cand=cand.filter(p=>S.st[p.i]!=="x"&&!S.vis[p.i]);
+  const wgt=p=>{const d=p.km-my.km;let k=d<0?1e6-d:d;if(S.st[p.i]==="v")k-=5e5;return k;};
+  cand.sort((a,b)=>wgt(a)-wgt(b));
+  const top=cand.slice(0,6);
+  $("#nowList").innerHTML=top.length?top.map(rowHtml).join(""):'<div class="card">Nic nesedí — zkus povolit filtr (víc času nebo energie), nebo mrkni do záložky Místa.</div>';
+  bindRows("#nowList");
+}
+function rowHtml(p){
+  const dk=p.km-((P[S.pos]||P[0]).km);
+  return '<div class="place" data-i="'+p.i+'"><span class="tico" style="background:'+colOf(p,"t")+'2E">'+'<svg><use href="#'+TICO[p.t]+'"/></svg></span>'
+  +'<div><h3>'+esc(nm(p))+'</h3><div class="meta">'
+  +'<span class="tag2">'+TYP[p.t][0].replace(/^\S+\s/,"")+'</span>'
+  +'<span class="tag2"><i class="cdot sm" style="background:var('+CEN[p.c][1]+')"></i>'+CEN[p.c][0].replace(/^\S+\s/,"")+'</span>'
+  +'<span class="tag2">'+DEL[p.d]+'</span>'
+  +'<span class="tag2">'+(dk>=0?"+"+dk+" km":"−"+(-dk)+" km zpět")+'</span>'
+  +dodTag(p)+'</div></div>'
+  +'<span class="st">'+(S.vis[p.i]?"✔":"")+stIcon(p.i)+'</span></div>';
+}
+function bindRows(sel){document.querySelectorAll(sel+" .place").forEach(el=>el.addEventListener("click",()=>openCard(+el.dataset.i)));}
+
+// ---------- MÍSTA ----------
+let fTyp=null,fCen=null;
+function renderList(){
+  const q=$("#q").value.toLowerCase();
+  let out=P.filter(p=>p.p!=="t");
+  if(q)out=out.filter(p=>(p.n+p.tx+p.f).toLowerCase().includes(q));
+  if(fTyp)out=out.filter(p=>p.t===fTyp);
+  if(fCen)out=out.filter(p=>p.c===fCen);
+  $("#list").innerHTML=out.map(rowHtml).join("")||'<div class="card">Nic nenalezeno.</div>';
+  bindRows("#list");
+}
+function buildFilterChips(){
+  $("#chTyp").innerHTML=Object.keys(TYP).map(k=>'<button class="chip" data-v="'+k+'"><svg class="cico"><use href="#'+TICO[k]+'"/></svg>'+TYP[k][0].replace(/^\S+\s/,"")+'</button>').join("");
+  $("#chCen").innerHTML=Object.keys(CEN).filter(k=>k!=="T").map(k=>'<button class="chip" data-v="'+k+'"><i class="cdot" style="background:var('+CEN[k][1]+')"></i>'+CEN[k][0].replace(/^\S+\s/,"")+'</button>').join("");
+  $("#chTyp").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    if(fTyp===b.dataset.v){fTyp=null;b.classList.remove("on");}else{fTyp=b.dataset.v;$("#chTyp").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");}renderList();}));
+  $("#chCen").querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    if(fCen===b.dataset.v){fCen=null;b.classList.remove("on");}else{fCen=b.dataset.v;$("#chCen").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");}renderList();}));
+  $("#q").addEventListener("input",renderList);
+}
+
+// ---------- DENÍK ----------
+function renderLog(){
+  const tot=S.bud.reduce((a,b)=>a+b.a,0);
+  $("#bTotal").textContent=tot.toLocaleString("cs-CZ")+" Kč";
+  const by={};S.bud.forEach(b=>by[b.c]=(by[b.c]||0)+b.a);
+  $("#bByCat").textContent=Object.entries(by).map(([k,v])=>k+" "+v.toLocaleString("cs-CZ")).join("  ·  ")||"zatím prázdno";
+  $("#bList").innerHTML=S.bud.map((b,ix)=>'<div class="bitem"><span>'+b.c+' '+(b.n?esc(b.n):"")+'</span><span>'+b.a.toLocaleString("cs-CZ")+' Kč <button data-x="'+ix+'">✕</button></span></div>').join("");
+  $("#bList").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{S.bud.splice(+b.dataset.x,1);save();renderLog();}));
+  const marked=P.filter(p=>S.st[p.i]||S.notes[p.i]||S.vis[p.i]);
+  $("#logPlaces").innerHTML=marked.length?marked.map(rowHtml).join(""):'<div class="card">Zatím nic — otevři místo a označ ⭐ Určitě chci, 🕐 Když bude čas, nebo ✖ Spíš ne.</div>';
+  bindRows("#logPlaces");
+  renderStats();
+}
+$("#kmWadd").addEventListener("click",()=>{const v=parseFloat($("#kmW").value);if(!v)return;S.walkKm=(S.walkKm||0)+v;$("#kmW").value="";save();renderLog();});
+$("#kmDadd").addEventListener("click",()=>{const v=parseFloat($("#kmD").value);if(!v)return;S.driveKm=(S.driveKm||0)+v;$("#kmD").value="";save();renderLog();});
+$("#bAdd").addEventListener("click",()=>{
+  const a=parseFloat($("#bAmt").value);if(!a)return;
+  S.bud.push({a,c:$("#bCat").value,n:$("#bNote").value,t:Date.now()});
+  $("#bAmt").value="";$("#bNote").value="";save();renderLog();
+});
+
+// ---------- STATISTIKY & NÁLEPKY ----------
+function metrics(){
+  const visArr=P.filter(p=>S.vis[p.i]);
+  const cnt=t=>visArr.filter(p=>p.t===t).length;
+  const walkAuto=visArr.reduce((a,p)=>a+WALK[p.d],0);
+  const walk=S.walkKm>0?Math.round(S.walkKm):walkAuto;
+  const driven=Math.max((P[S.pos]||P[0]).km,Math.round(S.driveKm||0));
+  const spent=S.bud.reduce((a,b)=>a+b.a,0);
+  const days=new Set(S.bud.map(b=>new Date(b.t).toDateString())).size||1;
+  let saved=0;visArr.forEach(p=>{for(const k in SAVED)if(p.n.includes(k))saved+=SAVED[k];});
+  const freeCnt=visArr.filter(p=>p.c==="Z").length;
+  const coffee=S.bud.filter(b=>b.c.includes("kafe")).length;
+  return {visArr,vis:visArr.length,cnt,walk,driven,spent,days,saved,freeCnt,coffee};
+}
+function stat(v,l){return '<div class="stat"><b>'+v+'</b><span>'+l+'</span></div>';}
+function renderStats(){
+  const m=metrics();
+  $("#statCard").innerHTML=
+    stat(m.vis+" / 65","navštíveno míst")
+   +stat((S.driveKm>0?"":"~")+m.driven+" km","ujeto autem")
+   +stat((S.walkKm>0?"":"~")+m.walk+" km","nachozeno pěšky")
+   +stat(m.spent.toLocaleString("cs-CZ")+" Kč","útrata · Ø "+Math.round(m.spent/m.days).toLocaleString("cs-CZ")+" Kč/den")
+   +stat(m.saved.toLocaleString("cs-CZ")+" Kč","ušetřeno na lanovkách a lodích")
+   +stat(m.freeCnt,"zážitků úplně zdarma");
+  $("#stkGrid").innerHTML=ACH.map(a=>{const ok=a.f(m);
+    return '<div class="stk'+(ok?'':' lock')+'" title="'+a.d+'"><svg><use href="#'+a.ic+'"/></svg><div class="t">'+a.n+'</div><div class="d">'+a.d+'</div></div>';}).join("");
+}
+
+// ---------- NAV/TABS ----------
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  document.querySelectorAll(".tabpane").forEach(x=>x.classList.remove("on"));
+  $("#pane-"+b.dataset.p).classList.add("on");
+  if(b.dataset.p==="map")drawMap();
+}));
+
+// ---------- INIT ----------
+function renderAll(){renderNow();renderList();renderLog();drawRibbon();}
+(async function(){
+  await load();
+  $("#posSel").innerHTML=P.map(p=>'<option value="'+p.i+'">'+esc(nm(p))+' · km '+p.km+'</option>').join("");
+  $("#posSel").value=S.pos;
+  $("#posSel").addEventListener("change",e=>{S.pos=+e.target.value;save();drawRibbon();renderNow();});
+  chip("chTime",v=>{fTime=+v;renderNow();});
+  chip("chWx",v=>{fWx=v;renderNow();});
+  chip("chNrg",v=>{fNrg=+v;renderNow();});
+  chip("chMode",v=>{mapMode=v;drawMap();});
+  buildFilterChips();
+  renderAll();drawMap();
+  if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+    try{ navigator.serviceWorker.register("sw.js"); }catch(e){}
+  }
+})();
+</script>
+</body>
+</html>
