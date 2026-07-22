@@ -282,6 +282,7 @@ nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2p
   <div class="card">
     <p><b>🇨🇭 Dálniční známka Švýcarsko</b> — povinná, ~40 CHF/rok (fyzická nálepka nebo e-vignette na via.admin.ch). Bez ní pokuta 200 CHF. Rakousko: krátký úsek u Bregenzu jde objet po silnici, jinak 11denní vignette ~12 €.</p>
     <p><b>⛽ Tankovací strategie:</b> plnou v ČR → dotankovat v Rakousku (Vorarlberg u Lindau, bývá nejlevněji v regionu) → naposledy plnou ve Švýcarsku v Martigny/Monthey (Francie v horách je dražší).</p>
+    <p><b>🚐 Parkoviště v appce:</b> souřadnice míří na konkrétní plochy, ale terén se mění — před nočním dojezdem si flek pro jistotu potvrď v Park4night (tlačítko je u každého místa).</p>
     <p><b>🚐 Transit:</b> měj v mobilu vyfocenou výšku a délku vozu. Podzemní garáže (limit 2,0–2,1 m) rovnou ignoruj — všechny tipy v appce jsou venkovní plochy.</p>
   </div>
   <div class="eyebrow">SUP pravidla Švýcarsko</div>
@@ -338,6 +339,74 @@ const ACH=[
  {n:"Šetřílek",d:"ušetřeno 500 Kč",ic:"i-nav",f:m=>m.saved>=500},
  {n:"Kafemilka",d:"3× kafe dne",ic:"i-cup",f:m=>m.coffee>=3},
  {n:"Châtel!",d:"cíl cesty 🎉",ic:"i-compass",f:m=>m.driven>=1180}];
+const PARK={
+1:[49.8590,12.2230,"P u hradu Falkenberg","zdarma","u vstupu do údolí","Odsud po žluté podél řeky."],
+2:[49.2735,12.1560,"P Badestrand Steinberg","zdarma (v sezoně drobný popl.)","100 m k pláži","Velká rovná plocha, stellplatz hned vedle."],
+3:[49.0533,12.3925,"Wanderparkplatz Postfelden","zdarma","u vstupu","V týdnu prázdno."],
+4:[49.0330,12.2255,"P Walhalla","placené ~4 €","10 min do schodů",""],
+5:[49.0245,12.1035,"P Unterer Wöhrd","placené ~1,50 €/h","800 m ke Kamennému mostu","Venkovní plocha na ostrově, žádná rampa."],
+6:[48.9175,11.8720,"P Volksfestplatz Kelheim","placené ~5 €/den","5 km ke klášteru pěšky/na kole","Obří plocha, vejde se cokoli."],
+7:[47.6635,9.9900,"P Eistobel (Argentobelbrücke)","placené ~3 €","u vstupu",""],
+8:[47.5788,9.8390,"P Scheidegger Wasserfälle","placené drobné","200 m",""],
+9:[47.5520,9.6990,"Stellplatz / P+R Lindau-Reutin","placené ~6–18 €","1,6 km na ostrov (kolo/bus)","Bezpečné i na noc."],
+10:[47.5745,9.6115,"P u nádraží Nonnenhorn","zdarma / modrá zóna","400 m k jezeru",""],
+11:[47.5035,9.7515,"P Pfänderbahn – venkovní řady","placené ~4 €","start stezky nahoru","Garáži se vyhni, jen venkovní část."],
+12:[47.4965,9.6330,"P Rohrspitz","zdarma","přímo u vody",""],
+13:[47.6960,9.2745,"P4 Allmendweg Meersburg","placené ~1 €/h","500 m do Oberstadtu","Přijeď do 9:30, pak bývá plno."],
+14:[47.7215,9.2280,"P Pfahlbauten","placené ~4 €","300 m",""],
+15:[47.6765,9.1750,"P+R Bodenseeforum","placené ~5 €/den","1,5 km / bus do Altstadtu",""],
+16:[47.6585,8.8570,"P Schiffländi","placené ~1–2 CHF/h","300 m na náměstí","Ráno volno."],
+17:[47.6585,8.8570,"P Schiffländi (start SUP)","placené ~1–2 CHF/h","vylez v Diessenhofenu, vlak zpět",""],
+18:[47.6790,8.6155,"P Rheinfall – severní břeh","placené ~5 CHF","400 m k Rheinfallquai","Z téhle strany jsou výhledy zdarma."],
+19:[47.6890,8.6430,"Stellplatz Schaffhausen – Rheinufer","placené ~15 CHF/noc","900 m k Munotu","Ideální i na přespání."],
+20:[47.4300,9.3690,"P Athletik Zentrum","placené","1,2 km ke klášteru",""],
+21:[47.3285,9.4075,"P Brauereiplatz Appenzell","placené drobné","400 m do centra",""],
+22:[47.1345,9.0935,"P přístav Weesen","zdarma / modrá zóna","4 km po břehu (1 h)","Silnička do Betlis je pro Transit nevhodná."],
+23:[47.1345,9.0935,"P přístav Weesen","zdarma / modrá zóna","5 km pěšky, nebo zpět lodí",""],
+24:[47.2225,8.8330,"P+R Grünfeld","placené ~1 CHF/h","900 m k hradu",""],
+25:[47.1290,8.7440,"P Brüel Einsiedeln","placené ~5 CHF/den","600 m ke klášteru","Zvyklé na autobusy."],
+26:[47.0325,8.5935,"P Seebad Lauerz","drobné / zdarma","u vody",""],
+27:[47.0345,8.3110,"P+R Allmend/Messe","placené ~10 CHF/den","S-Bahn 3 min do centra","Do města nejezdi, garáže mají 2 m."],
+28:[47.0490,8.5470,"P Arth-Goldau","placené","u zubačky",""],
+29:[46.9890,8.6300,"P Stoosbahn Schlattli","placené","u lanovky",""],
+30:[47.0785,8.4470,"P Hohle Gasse","zdarma","200 m",""],
+31:[46.9685,8.5850,"P Seelisberg (vesnice)","zdarma / drobné","40 min dolů na Rütli","Zpátky do kopce ~1 h."],
+32:[46.9575,8.2830,"P Alpnachstad","placené","u jezera",""],
+33:[46.7940,8.0960,"P na sedle Glaubenbielen","zdarma","chodníky hned od parkoviště",""],
+34:[46.7250,8.2010,"P Aareschlucht West","zdarma pro návštěvníky","u vstupu",""],
+35:[46.7175,8.1855,"P Reichenbachbahn","zdarma / drobné","stezka začíná zde","Nahoru pěšky ~30 min."],
+36:[46.6660,8.1525,"P Rosenlaui","placené ~5 CHF","u soutěsky","Úzká horská cesta, jeď mimo špičku."],
+37:[46.7555,8.0345,"P Brienz Seefeld / kemp Aaregg","placené","u vody","Kemp Aaregg = nocleh se SUP startem."],
+38:[46.7370,7.9905,"P Giessbach (nad hotelem)","placené ~6 CHF","20 min pěšky dolů",""],
+39:[46.7120,7.9630,"P Iseltwald – vjezd do obce","placené ~6 CHF/3 h","300 m k molu","Do obce autem nejezdi."],
+40:[46.5700,7.9120,"P Trümmelbach","zdarma pro návštěvníky","u vstupu","V srpnu do 9:00."],
+41:[46.5920,7.9090,"P2 u kostela, Lauterbrunnen","placené ~9 CHF/den","400 m pod vodopád","Hlavní parkovací dům je krytý — s Transitem na venkovní P."],
+42:[46.6140,8.0430,"P Gletscherschlucht","zdarma","u vstupu",""],
+43:[46.6250,8.0400,"P Firstbahn Grindelwald","placené","u lanovky",""],
+44:[46.6625,7.8690,"P Wilderswil","placené","u zubačky",""],
+45:[46.6870,7.7885,"P St. Beatus (u silnice)","placené","u vstupu","Malé a rychle plné — zvaž bus z Interlakenu."],
+46:[46.6995,7.7920,"P Niederhornbahn Beatenberg","placené ~5 CHF/den","start výstupu",""],
+47:[46.6905,7.6740,"P Spiez Bucht","placené","u lida a mola",""],
+48:[46.4925,7.6810,"P Oeschinensee (Kandersteg)","placené ~8 CHF/den","pěšky nahoru 1,5 h","Velké a rovné."],
+49:[46.5325,7.6660,"P Blausee","zdarma pro návštěvníky","u vstupu",""],
+50:[46.5080,7.5600,"P Cholerenschlucht / Boden","zdarma","u vstupu",""],
+51:[46.5850,7.0800,"P1 Gruyères (pod městem)","placené ~2 CHF/h","400 m do kopce",""],
+52:[46.6060,7.1020,"P Cailler Broc","zdarma","1 km ke vstupu do soutěsky","Parkuj u čokoládovny."],
+53:[46.6800,7.0900,"P Le Bry (u mola)","zdarma","300 m k vodě","Start SUP na Île d'Ogoz."],
+54:[46.9565,6.7260,"P u nádraží Noiraigue","zdarma","start stezky",""],
+55:[46.3990,6.9230,"P Villeneuve – nábřeží","zdarma / modrá zóna","2 km na kole k Chillonu","U hradu je P malé a drahé."],
+56:[46.3990,6.9230,"P Villeneuve – nábřeží","zdarma / modrá zóna","základna","Rovina, klid, kemp poblíž."],
+57:[46.3990,6.9230,"P Villeneuve + vlak do Vevey","zdarma / modrá zóna","vlak 15 min, pak kolo vinicemi","S Transitem do vesniček Lavaux nejezdi."],
+58:[46.3990,6.9230,"P Villeneuve + vlak Montreux","zdarma / modrá zóna","vstup do rokle z Les Planches","Montreux garáže = limity 2 m."],
+59:[46.3990,6.9230,"P Villeneuve","zdarma / modrá zóna","zubačka jede z Montreux",""],
+60:[46.3430,6.8580,"P Le Flon (Taney)","placené ~5 CHF","výstup 1,5 h","Úzká cesta — alternativa: P Vouvry dole."],
+61:[46.2170,7.0020,"P des Glariers, St-Maurice","zdarma / drobné","400 m k opatství",""],
+62:[46.1490,7.0280,"P Pissevache","zdarma","200 m k vodopádu","Soutěska Trient má vlastní P o 2 km dál."],
+63:[46.1555,6.9835,"P Van d'en Haut","placené ~5 CHF/den","výstup 1,5–2 h","Serpentiny — opatrně, nebo parkuj v Salvanu."],
+64:[46.0990,7.0660,"P Amphithéâtre Martigny","zdarma","10 min do centra","U římského amfiteátru."],
+65:[46.1770,6.8680,"P Champéry (vesnice)","zdarma / drobné","pár minut ke vstupu",""],
+66:[46.2555,6.8500,"P Linga Châtel","zdarma","u vleků","V létě MTB provoz."]
+};
 const DEL=["průjezd","do 1 h","1–2 h","půlden","celý den"];
 const D=[
 ["🚐 START: Žíželeves (HK)",50.3323,15.7584,0,"T",0,"T","–","✅","t","https://www.hkregion.cz","Výchozí bod. Vyraz za tmy, dálnice budou prázdné.","Doma :)","Tankuj plnou v ČR — nejlevnější nafta celé trasy.",1,1,0],
@@ -484,7 +553,11 @@ function drawMap(){
 function openCard(i){
   const p=P[i];
   const near=P.filter(q=>q.i!==i&&q.p!=="t").map(q=>({q,d2:Math.pow(q.la-p.la,2)+Math.pow((q.lo-p.lo)*0.7,2)})).sort((a,b)=>a.d2-b.d2).slice(0,3);
-  let btns='<a class="btn p" target="_blank" rel="noopener" href="'+nav(p)+'"><svg><use href="#i-nav"/></svg>Navigovat</a>'
+  const pk=PARK[p.i]||null;
+  const pkLa=pk?pk[0]:p.la, pkLo=pk?pk[1]:p.lo;
+  const pkNav="https://www.google.com/maps/dir/?api=1&destination="+pkLa+","+pkLo+"&travelmode=driving";
+  let btns='<a class="btn p" target="_blank" rel="noopener" href="'+pkNav+'"><svg><use href="#i-van"/></svg>Na parkoviště</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="'+nav(p)+'"><svg><use href="#i-nav"/></svg>K cíli</a>'
     +'<a class="btn g" target="_blank" rel="noopener" href="https://park4night.com/en/search?lat='+p.la+'&lng='+p.lo+'"><svg><use href="#i-tent"/></svg>Park4night</a>'
     +'<a class="btn g" target="_blank" rel="noopener" href="'+p.w+'"><svg><use href="#i-globe"/></svg>Web</a>'
     +'<a class="btn g" target="_blank" rel="noopener" href="'+foto(p)+'"><svg><use href="#i-cam"/></svg>Fotky</a>';
@@ -496,7 +569,9 @@ function openCard(i){
     +'<span class="badge" style="background:#8A8272">'+DEL[p.d]+'</span></div>'    +'<div class="kv">Co tam uvidíš</div><p style="font-size:14px">'+esc(p.tx)+'</p>'
     +'<div class="kv">Vstup</div><p style="font-size:13.5px">'+esc(p.v)+'</p>'
     +'<div class="fact">💡 '+esc(p.f)+'</div>'
-    +'<div class="park"><b>'+(p.dod.startsWith("✅")?"Transit OK":p.dod.startsWith("⚠")?"Transit – pozor":"Bez dodávky")+'</b> · '+esc(p.pk)+'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS '+p.la+', '+p.lo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
+    +'<div class="park"><b>'+(p.dod.startsWith("✅")?"Transit OK":p.dod.startsWith("⚠")?"Transit – pozor":"Bez dodávky")+'</b>'
+    +(pk?'<br><b>'+esc(pk[2])+'</b> · '+esc(pk[3])+' · '+esc(pk[4])+(pk[5]?'<br>'+esc(pk[5]):''):'<br>'+esc(p.pk))
+    +'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS parkoviště '+pkLa+', '+pkLo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
     +'<div class="kv">Kde to je</div>'
     +'<div class="mini"><iframe id="miniMap" src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z='+MZ+'&output=embed&hl=cs" loading="lazy" title="mapa"></iframe>'
     +'<a class="minilink" target="_blank" rel="noopener" aria-label="otevřít v Google Maps" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"></a>'
