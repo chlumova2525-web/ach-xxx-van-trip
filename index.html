@@ -143,6 +143,14 @@ nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2p
 .mzoom{position:absolute;right:8px;top:8px;z-index:3;display:flex;flex-direction:column;gap:6px}
 .mzoom button{width:36px;height:36px;border:1.8px solid var(--ink);border-radius:10px;background:var(--card);font-size:19px;font-weight:700;line-height:1;box-shadow:2px 2px 0 rgba(46,42,35,.22);cursor:pointer;color:var(--ink)}
 .mzoom button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(46,42,35,.22)}
+
+.pimg{position:relative;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;margin-top:4px;box-shadow:3px 3px 0 rgba(46,42,35,.12)}
+.pimg img{width:100%;height:175px;object-fit:cover;display:block;background:#E5DCC6}
+.pimgc{position:absolute;right:6px;bottom:6px;background:rgba(251,247,236,.92);border:1px solid var(--ink);border-radius:999px;font-family:var(--mono);font-size:9.5px;padding:2px 8px}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%) translateY(16px);bottom:88px;background:var(--ink);color:var(--paper);border-radius:12px;padding:10px 12px 10px 15px;display:flex;gap:12px;align-items:center;z-index:70;opacity:0;pointer-events:none;transition:.25s;box-shadow:3px 4px 0 rgba(46,42,35,.3);font-size:13.5px;max-width:92vw}
+#toast.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+#toastUndo{border:1.5px solid var(--paper);background:none;color:var(--paper);border-radius:8px;padding:5px 12px;font-weight:600;cursor:pointer;flex:none}
 </style>
 </head>
 <body>
@@ -303,10 +311,16 @@ nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2p
   <div class="card">
     <p><b>Johanna Spyri: Heidi</b> — povinnost, čti u Walensee. · <b>A. C. Doyle: Poslední případ</b> — u Reichenbachských vodopádů. · <b>F. Schiller: Vilém Tell</b> — k Hohle Gasse a Rütli. · <b>Lord Byron: Vězeň chillonský</b> — na nábřeží u Chillonu. · <b>Švýcarské pohádky</b> (výbor lidových pověstí — drak od Beatových jeskyní, modré oči Blausee). · <b>M. Twain: Tulákem po Evropě</b> — jeho výstup na Rigi je nejvtipnější kapitola o Švýcarsku, jaká kdy vznikla.</p>
   </div>
+  <div class="eyebrow">Nová cesta</div>
+  <div class="card">
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:10px">Restartuje průběh cesty: smaže check-iny, pozici na trase, kilometry a rozpočet. <b>Preference (⭐ 🕐 ✖) a poznámky u míst zůstanou.</b> Sedm vteřin jde vzít Zpět.</p>
+    <button class="btn g" id="resetBtn" style="width:100%">Restartovat cestu</button>
+  </div>
   <small class="note">Ceny a otvíračky jsou orientační (léto 2026) — před placeným vstupem mrkni na web místa. Data v appce se ukládají automaticky a zůstanou i po zavření.</small>
 </section>
 </main>
 
+<div id="toast"><span id="toastMsg"></span><button id="toastUndo" type="button">Zpět</button></div>
 <nav>
   <button data-p="now" class="on"><span class="icw"><svg><use href="#i-compass"/></svg></span>Co teď?</button>
   <button data-p="map"><span class="icw"><svg><use href="#i-map"/></svg></span>Mapa</button>
@@ -340,84 +354,83 @@ const ACH=[
  {n:"Kafemilka",d:"3× kafe dne",ic:"i-cup",f:m=>m.coffee>=3},
  {n:"Châtel!",d:"cíl cesty 🎉",ic:"i-compass",f:m=>m.driven>=1180}];
 const PARK={
-1:[49.8590,12.2230,"P u hradu Falkenberg","zdarma","u vstupu do údolí","Odsud po žluté podél řeky."],
-2:[49.2735,12.1560,"P Badestrand Steinberg","zdarma (v sezoně drobný popl.)","100 m k pláži","Velká rovná plocha, stellplatz hned vedle."],
-3:[49.0533,12.3925,"Wanderparkplatz Postfelden","zdarma","u vstupu","V týdnu prázdno."],
-4:[49.0330,12.2255,"P Walhalla","placené ~4 €","10 min do schodů",""],
-5:[49.0245,12.1035,"P Unterer Wöhrd","placené ~1,50 €/h","800 m ke Kamennému mostu","Venkovní plocha na ostrově, žádná rampa."],
-6:[48.9175,11.8720,"P Volksfestplatz Kelheim","placené ~5 €/den","5 km ke klášteru pěšky/na kole","Obří plocha, vejde se cokoli."],
-7:[47.6635,9.9900,"P Eistobel (Argentobelbrücke)","placené ~3 €","u vstupu",""],
-8:[47.5788,9.8390,"P Scheidegger Wasserfälle","placené drobné","200 m",""],
-9:[47.5520,9.6990,"Stellplatz / P+R Lindau-Reutin","placené ~6–18 €","1,6 km na ostrov (kolo/bus)","Bezpečné i na noc."],
-10:[47.5745,9.6115,"P u nádraží Nonnenhorn","zdarma / modrá zóna","400 m k jezeru",""],
-11:[47.5035,9.7515,"P Pfänderbahn – venkovní řady","placené ~4 €","start stezky nahoru","Garáži se vyhni, jen venkovní část."],
-12:[47.4965,9.6330,"P Rohrspitz","zdarma","přímo u vody",""],
-13:[47.6960,9.2745,"P4 Allmendweg Meersburg","placené ~1 €/h","500 m do Oberstadtu","Přijeď do 9:30, pak bývá plno."],
-14:[47.7215,9.2280,"P Pfahlbauten","placené ~4 €","300 m",""],
-15:[47.6765,9.1750,"P+R Bodenseeforum","placené ~5 €/den","1,5 km / bus do Altstadtu",""],
-16:[47.6585,8.8570,"P Schiffländi","placené ~1–2 CHF/h","300 m na náměstí","Ráno volno."],
-17:[47.6585,8.8570,"P Schiffländi (start SUP)","placené ~1–2 CHF/h","vylez v Diessenhofenu, vlak zpět",""],
-18:[47.6790,8.6155,"P Rheinfall – severní břeh","placené ~5 CHF","400 m k Rheinfallquai","Z téhle strany jsou výhledy zdarma."],
-19:[47.6890,8.6430,"Stellplatz Schaffhausen – Rheinufer","placené ~15 CHF/noc","900 m k Munotu","Ideální i na přespání."],
-20:[47.4300,9.3690,"P Athletik Zentrum","placené","1,2 km ke klášteru",""],
-21:[47.3285,9.4075,"P Brauereiplatz Appenzell","placené drobné","400 m do centra",""],
-22:[47.1345,9.0935,"P přístav Weesen","zdarma / modrá zóna","4 km po břehu (1 h)","Silnička do Betlis je pro Transit nevhodná."],
-23:[47.1345,9.0935,"P přístav Weesen","zdarma / modrá zóna","5 km pěšky, nebo zpět lodí",""],
-24:[47.2225,8.8330,"P+R Grünfeld","placené ~1 CHF/h","900 m k hradu",""],
-25:[47.1290,8.7440,"P Brüel Einsiedeln","placené ~5 CHF/den","600 m ke klášteru","Zvyklé na autobusy."],
-26:[47.0325,8.5935,"P Seebad Lauerz","drobné / zdarma","u vody",""],
-27:[47.0345,8.3110,"P+R Allmend/Messe","placené ~10 CHF/den","S-Bahn 3 min do centra","Do města nejezdi, garáže mají 2 m."],
-28:[47.0490,8.5470,"P Arth-Goldau","placené","u zubačky",""],
-29:[46.9890,8.6300,"P Stoosbahn Schlattli","placené","u lanovky",""],
-30:[47.0785,8.4470,"P Hohle Gasse","zdarma","200 m",""],
-31:[46.9685,8.5850,"P Seelisberg (vesnice)","zdarma / drobné","40 min dolů na Rütli","Zpátky do kopce ~1 h."],
-32:[46.9575,8.2830,"P Alpnachstad","placené","u jezera",""],
-33:[46.7940,8.0960,"P na sedle Glaubenbielen","zdarma","chodníky hned od parkoviště",""],
-34:[46.7250,8.2010,"P Aareschlucht West","zdarma pro návštěvníky","u vstupu",""],
-35:[46.7175,8.1855,"P Reichenbachbahn","zdarma / drobné","stezka začíná zde","Nahoru pěšky ~30 min."],
-36:[46.6660,8.1525,"P Rosenlaui","placené ~5 CHF","u soutěsky","Úzká horská cesta, jeď mimo špičku."],
-37:[46.7555,8.0345,"P Brienz Seefeld / kemp Aaregg","placené","u vody","Kemp Aaregg = nocleh se SUP startem."],
-38:[46.7370,7.9905,"P Giessbach (nad hotelem)","placené ~6 CHF","20 min pěšky dolů",""],
-39:[46.7120,7.9630,"P Iseltwald – vjezd do obce","placené ~6 CHF/3 h","300 m k molu","Do obce autem nejezdi."],
-40:[46.5700,7.9120,"P Trümmelbach","zdarma pro návštěvníky","u vstupu","V srpnu do 9:00."],
-41:[46.5920,7.9090,"P2 u kostela, Lauterbrunnen","placené ~9 CHF/den","400 m pod vodopád","Hlavní parkovací dům je krytý — s Transitem na venkovní P."],
-42:[46.6140,8.0430,"P Gletscherschlucht","zdarma","u vstupu",""],
-43:[46.6250,8.0400,"P Firstbahn Grindelwald","placené","u lanovky",""],
-44:[46.6625,7.8690,"P Wilderswil","placené","u zubačky",""],
-45:[46.6870,7.7885,"P St. Beatus (u silnice)","placené","u vstupu","Malé a rychle plné — zvaž bus z Interlakenu."],
-46:[46.6995,7.7920,"P Niederhornbahn Beatenberg","placené ~5 CHF/den","start výstupu",""],
-47:[46.6905,7.6740,"P Spiez Bucht","placené","u lida a mola",""],
-48:[46.4925,7.6810,"P Oeschinensee (Kandersteg)","placené ~8 CHF/den","pěšky nahoru 1,5 h","Velké a rovné."],
-49:[46.5325,7.6660,"P Blausee","zdarma pro návštěvníky","u vstupu",""],
-50:[46.5080,7.5600,"P Cholerenschlucht / Boden","zdarma","u vstupu",""],
-51:[46.5850,7.0800,"P1 Gruyères (pod městem)","placené ~2 CHF/h","400 m do kopce",""],
-52:[46.6060,7.1020,"P Cailler Broc","zdarma","1 km ke vstupu do soutěsky","Parkuj u čokoládovny."],
-53:[46.6800,7.0900,"P Le Bry (u mola)","zdarma","300 m k vodě","Start SUP na Île d'Ogoz."],
-54:[46.9565,6.7260,"P u nádraží Noiraigue","zdarma","start stezky",""],
-55:[46.3990,6.9230,"P Villeneuve – nábřeží","zdarma / modrá zóna","2 km na kole k Chillonu","U hradu je P malé a drahé."],
-56:[46.3990,6.9230,"P Villeneuve – nábřeží","zdarma / modrá zóna","základna","Rovina, klid, kemp poblíž."],
-57:[46.3990,6.9230,"P Villeneuve + vlak do Vevey","zdarma / modrá zóna","vlak 15 min, pak kolo vinicemi","S Transitem do vesniček Lavaux nejezdi."],
-58:[46.3990,6.9230,"P Villeneuve + vlak Montreux","zdarma / modrá zóna","vstup do rokle z Les Planches","Montreux garáže = limity 2 m."],
-59:[46.3990,6.9230,"P Villeneuve","zdarma / modrá zóna","zubačka jede z Montreux",""],
-60:[46.3430,6.8580,"P Le Flon (Taney)","placené ~5 CHF","výstup 1,5 h","Úzká cesta — alternativa: P Vouvry dole."],
-61:[46.2170,7.0020,"P des Glariers, St-Maurice","zdarma / drobné","400 m k opatství",""],
-62:[46.1490,7.0280,"P Pissevache","zdarma","200 m k vodopádu","Soutěska Trient má vlastní P o 2 km dál."],
-63:[46.1555,6.9835,"P Van d'en Haut","placené ~5 CHF/den","výstup 1,5–2 h","Serpentiny — opatrně, nebo parkuj v Salvanu."],
-64:[46.0990,7.0660,"P Amphithéâtre Martigny","zdarma","10 min do centra","U římského amfiteátru."],
-65:[46.1770,6.8680,"P Champéry (vesnice)","zdarma / drobné","pár minut ke vstupu",""],
-66:[46.2555,6.8500,"P Linga Châtel","zdarma","u vleků","V létě MTB provoz."]
+1:[49.85827,12.21266,"Wanderparkplatz Hammermühle","zdarma","u vstupu do údolí","Štěrk, ~15 míst — přijeď dřív. Okruh k Blockhütte ~10 km."],
+2:[49.27221,12.15827,"P u Badestrandu (jižní břeh)","placené v sezoně","100 m k pláži","Jižní břeh je klidnější než u dřevěné koule."],
+3:[49.07857,12.43653,"Parkplatz Höllbach (Postfelden)","zdarma","200 m ke vstupu","Velká plocha, málo stínu."],
+4:[49.03033,12.21541,"P Walhallastraße (dolní)","ZDARMA na 4 h (8–20 h)","20 min pěšky po schodech","Horní P u vstupu stojí 2,50 € — tenhle je zadarmo."],
+5:[49.02041,12.11068,"P Unterer Wöhrd","placené","800 m ke Kamennému mostu","Venkovní plocha na ostrově."],
+6:[48.91424,11.87515,"Volksfestplatz Kelheim","ZDARMA","5 min do centra; ke klášteru pěšky/na kole","Obří rovná plocha."],
+7:[47.63958,10.02259,"Parkplatz Eistobel P2 (dolní)","zdarma (louka)","přímo u dolního vstupu","Vstup do soutěsky ~3,50 €. P1 nahoře má infocentrum."],
+8:[47.59098,9.84129,"Parkplatz Wasserfälle","ZDARMA","200 m ke vstupu","Vzácnost: zdarma v Allgäu. Vstup ~5 €."],
+9:[47.55025,9.71935,"Stellplatz Lindau-Therme","~7 € menší / ~20 € větší vůz za noc","3 km na ostrov — kolo/bus","Štěrková rovina, elektřina, vedle termály."],
+10:[47.57482,9.61270,"P Bahnhof Nonnenhorn","ZDARMA","400 m k jezeru","Zdarma i na celý den."],
+11:[47.50550,9.75096,"Pfänderbahn-Parkhaus","placené","start stezky nahoru","POZOR: parkovací dům — vysoký Transit ne; líp dojet z Lindau na kole."],
+12:[47.49584,9.62799,"Seeparkplatz Rohrspitz","~2 €/h (draho)","u vody","Zvaž příjezd na kole z Lindau, parkovné tu štípe."],
+13:[47.70141,9.27280,"P am Allmendweg","4,50 €/den","15 min pěšky do města","Automat jen hotovost. Vedle stellplatz ~14–18 €/noc."],
+14:[47.72436,9.23641,"Parkplatz zum See","2,40 €/h, max 12 €","10–15 min k muzeu","POZOR kamery na SPZ — plať pečlivě. Zdarma: odpočívadlo Wölfele + 25 min lesem."],
+15:[47.67340,9.16380,"P&R Bodenseeforum","~3 €/den","bus/20 min do centra","Nejlevnější legální stání v Kostnici."],
+16:[47.66094,8.85725,"P Untertor Süd","2,50 CHF/h · 15/den","300 m na náměstí","Zadej PŘESNOU SPZ (kontroly). EasyPark funguje."],
+17:[47.66094,8.85725,"P Untertor Süd (start SUP)","2,50 CHF/h · 15/den","vylez v Diessenhofenu, vlak zpět",""],
+18:[47.67774,8.60949,"P Rheinfall sever (P2–P4)","5 CHF 1. h, pak 2 CHF/h","7–10 min k vodě","Dodávky na P4, WC zdarma. Na noc NE (stellplatz tu chtějí ~50 CHF)."],
+19:[47.68930,8.64400,"P u Rýna (Rheinuferstrasse)","placené","10 min k Munotu","Nocleh levně: Stellplatz Lottstetten ~10–15 € (11 km cyklo na Rheinfall) nebo Hallau."],
+20:[47.43010,9.38480,"venkovní stání u Athletik Zentrum","placené","15 min ke klášteru","Většina P v St. Gallenu jsou garáže do 2 m — s vysokým Transitem zvaž vynechání."],
+21:[47.33039,9.41290,"Brauereiplatz","1 CHF/h, max 8; večer a neděle ZDARMA","400 m do centra","Prvních 90 min zdarma s lístkem. WC zdarma."],
+22:[47.13303,9.09237,"P Weesen Speerplatz","levné, stání až 48 h","1 h pěšky po břehu k vodopádům","POZOR: P přímo u jezera má limit 3 h — na túru ne!"],
+23:[47.13303,9.09237,"P Weesen Speerplatz","levné, stání až 48 h","1,5 h pěšky do Quinten (zpět klidně lodí)",""],
+24:[47.22115,8.84777,"P Grünfeld Jona","6 CHF/24 h","15 min k hradu","Nocleh v obytňáku tolerován — levná základna."],
+25:[47.12876,8.75336,"Parkhaus Brüel","placené (výhodné 24h tarify)","podchodem do centra","POZOR garáž — vysoký Transit: venkovní P u kláštera (ověř Park4night)."],
+26:[47.03341,8.58361,"Parking/Stellplatz Badi Lauerz","den levně; noc 27 CHF/24 h vč. servisu","přímo u vody","Elektřina, voda, výlevka — vzácný full-servis u jezera."],
+27:[47.03359,8.30334,"P2 Allmend / Messe","~10 CHF/den","S-Bahn 1 zastávku do centra","Venkovní plocha; do města autem nejezdi."],
+28:[47.04845,8.55099,"SBB P+Rail Arth-Goldau","placené","u zubačky","Část krytá; platba app/automat SBB."],
+30:[47.09183,8.45198,"Parkplatz Hohle Gasse","levné","hned u úvozu","Místa i pro obytňáky."],
+31:[46.96509,8.58510,"P Seelisberg (Wissigstrasse)","přes den levné","40 min dolů na Rütli (zpět ~1 h)","Klid; dá se tu i přespat (~40 CHF/noc)."],
+32:[46.95516,8.27825,"P Pilatusbahn Alpnachstad","5 CHF/den","u jezera i zubačky","Mince nebo EasyPark."],
+33:[46.79400,8.09600,"P na sedle Glaubenbielen","zdarma","chodníky hned od P","Orientační — ověř na místě."],
+34:[46.72027,8.20304,"P Aareschlucht West","ZDARMA","2 min ke vstupu","Velké. Kombi soutěska+Reichenbach 18 CHF."],
+35:[46.71946,8.18772,"P u Reichenbachfall-Bahn","zdarma/drobné","stezka i lanovka odsud","Když plno: P Aareschlucht West a dojdi pěšky."],
+36:[46.67883,8.15547,"P Gletscherschlucht Rosenlaui","placené","u vstupu do soutěsky","Dál autem nesmíš — jen bus, pěšky, kolo."],
+37:[46.74809,8.04792,"Camping Aaregg","kemp — REZERVUJ","u vody, SUP z vlastní pláže","V srpnu narváno, volej 1–2 dny předem."],
+38:[46.73489,8.02750,"Naturpark Giessbach P","15 CHF — nutná ONLINE rezervace","8 min k vodopádu","Bez rezervace (QR) nevpustí! Úzká příjezdovka. Levněji: loď z Brienzu."],
+39:[46.70818,7.96279,"Iseltwald Parking & WC","1 CHF/h","300 m k molu","Čisté WC, platba kartou."],
+40:[46.57262,7.91193,"P Trümmelbach","ZDARMA (2 h pro návštěvníky)","u vstupu","Tip: odsud i pěšky 30 min do Lauterbrunnenu — ušetříš za drahé P ve vsi."],
+41:[46.59230,7.90806,"P Lauterbrunnen Kirche","~6 CHF/h · 15 CHF/24 h","400 m pod Staubbach","Venkovní, výhled na vodopád z místa! Parkhaus u nádraží = garáž, ne pro Transit."],
+42:[46.61338,8.04649,"P Gletscherschlucht","zdarma/drobné","u vstupu",""],
+43:[46.62401,8.04289,"P Firstbahn","2,50 CHF/h","u lanovky","Těsné pro větší vozy, brzy plno."],
+44:[46.66556,7.87087,"P Wilderswil","placené","u zubačky","Automat jen mince / app SEPP."],
+45:[46.68350,7.77798,"P Beatus-Höhlen (horní)","7 CHF paušál — JEN MINCE","10–20 min lesní pěšinou","Připrav si přesně 7 CHF, lístek za sklo."],
+46:[46.68510,7.74796,"Parkhaus Niederhornbahn (Beatenbucht)","7 CHF/24 h","lanovkou nebo pěšky nahoru","POZOR garáž, těsná — vysoký Transit: parkuj v Beatenbergu (ověř Park4night)."],
+47:[46.68886,7.68600,"Parking Spiez Bucht — VENKOVNÍ řada","2 CHF/h","5 min k hradu i molu","Jen ~9 venkovních míst; do podzemí s Transitem NE."],
+48:[46.49720,7.68270,"P Gondelbahn Oeschinensee","~8 CHF/den","start výstupu (1,5 h)","Velké; v létě přijeď do 9:00."],
+49:[46.53414,7.66778,"Bluelake Parking","5 CHF","u vstupu","Ber jako součást vstupného."],
+50:[46.50800,7.56000,"P Cholerenschlucht (Boden)","zdarma","u vstupu","Orientační — ověř na místě."],
+51:[46.58239,7.07841,"Gruyères P3","~4–5 CHF; noc v obytňáku ~30 CHF","10 min do kopce","TIP: P Moléson o 5 km dál je ZDARMA i pro obytňáky (noc 10 CHF)."],
+52:[46.60769,7.10419,"P visiteurs Maison Cailler","ZDARMA","3 min k čokoládovně, 1 km k soutěsce","Piknikové stoly."],
+53:[46.70200,7.08995,"P Île d'Ogoz (Le Bry)","5 CHF bez limitu","300 m k vodě","Jen automat, apky neberou."],
+54:[46.95490,6.72231,"CFF P+Rail Noiraigue","levné","start stezky","Odsud i túra na Creux du Van."],
+55:[46.39788,6.92691,"P+R Villeneuve (nádraží)","placené","10 min na kole k Chillonu","Míst málo; poblíž nábřežní modrá zóna. Noc: kemp Les Horizons Bleus."],
+56:[46.39788,6.92691,"P+R Villeneuve (nádraží)","placené","základna: rovina, klid","Noc: kemp Les Horizons Bleus u jezera."],
+57:[46.39788,6.92691,"P+R Villeneuve + vlak do Vevey","placené","vlak 15 min, pak kolo vinicemi","S Transitem do vesniček Lavaux nejezdi."],
+58:[46.39788,6.92691,"P+R Villeneuve + vlak Montreux","placené","vstup do rokle z Les Planches","Montreux garáže = limity 2 m."],
+59:[46.39788,6.92691,"P+R Villeneuve","placené","zubačka jede z Montreux",""],
+60:[46.33834,6.84920,"Parking du Flon","1 CHF/h (8–18 h), karta OK","start výstupu na Taney (1,5 h)","PŘÍSNÉ kontroly — plať hned a schovej doklad. Míst málo."],
+61:[46.21800,7.00250,"veřejné P u opatství","levné","400 m k bazilice","Ověř aktuální stav v Park4night."],
+62:[46.14420,7.02730,"P u Pissevache","ZDARMA","2 min k vodopádu","U stánku meruňky. Soutěska Trient o 2 km dál."],
+63:[46.14019,6.99341,"Parking Van d'en Haut","~5 CHF/den","výstup na Salanfe 1,5–2 h","Serpentiny ze Salvanu — pomalu."],
+64:[46.09434,7.07344,"P u římského amfiteátru","zdarma/levné","amfiteátr ZDARMA; 10 min do centra","Cestou Coop/Migros na velký nákup."],
+65:[46.17499,6.86987,"Parking Champéry (u lanovky)","5 CHF/den","pár minut ke Galerie Défago","POZOR: přes noc zákaz (0–8 h) a hlášená vloupání — nic viditelně nenechávej."],
+66:[46.25435,6.82139,"Parking du Linga","zdarma (den)","free shuttle do centra Châtelu","Čisté WC; v sezoně brzy plno."]
 };
 const DEL=["průjezd","do 1 h","1–2 h","půlden","celý den"];
 const D=[
 ["🚐 START: Žíželeves (HK)",50.3323,15.7584,0,"T",0,"T","–","✅","t","https://www.hkregion.cz","Výchozí bod. Vyraz za tmy, dálnice budou prázdné.","Doma :)","Tankuj plnou v ČR — nejlevnější nafta celé trasy.",1,1,0],
 ["🥾 Waldnaabtal (Falkenberg)",49.8490,12.2110,300,"P",3,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Waldnaabtal","Žulové údolí s řekou mezi obřími balvany, hospůdka Blockhütte uprostřed.","P Falkenberg u hradu, pak pěšky údolím.","V žule tu voda vybrousila „obří hrnce“ — kruhové mísy staré tisíce let.",0,2,0],
 ["🌊 Steinberger See",49.2730,12.1578,330,"J",2,"Z","okolí zdarma, koule ~7 €","✅","h","https://www.oberpfaelzer-seenland.de","Povinná pauza u A93: pláž, SUP, okruh 6 km. Stellplatz = nouzový nocleh.","Velké P u Badestrand + oficiální stellplatz, 5 min od dálnice.","Jezero je zatopený hnědouhelný důl — a dřevěná koule na břehu je největší pochozí dřevěná koule světa (40 m).",0,1,1],
-["💦 Höllbachtal (Postfelden)",49.0530,12.3931,355,"P",2,"Z","zdarma","✅","o","https://www.vorderer-bayerischer-wald.de","Divoký potok, balvany, prales — okruh 1,5–2 h, nikde nikdo.","Malé P Postfelden, v týdnu volno.","„Pekelný potok“ — kdysi tu stály mlýny, dnes NPR, kam chodí hlavně místní.",0,2,0],
+["💦 Höllbachtal (Postfelden)",49.0757,12.4345,355,"P",2,"Z","zdarma","✅","o","https://www.vorderer-bayerischer-wald.de","Divoký potok, balvany, prales — okruh 1,5–2 h, nikde nikdo.","Malé P Postfelden, v týdnu volno.","„Pekelný potok“ — kdysi tu stály mlýny, dnes NPR, kam chodí hlavně místní.",0,2,0],
 ["🏛️ Walhalla (Donaustauf)",49.0319,12.2262,365,"H",1,"L","zvenku zdarma, interiér ~4,50 €","✅","o","https://de.wikipedia.org/wiki/Walhalla","Mramorový „Parthenon“ nad Dunajem — výhled od sloupořadí je zdarma.","Velké P pod kopcem, 15 min do schodů.","Síň slávy Ludvíka I. Bavorského — mezi bustami najdeš i Koperníka a Karla IV. by se nedivil.",0,1,0],
 ["🏙️ Regensburg",49.0242,12.0993,375,"M",3,"Z","město zdarma","⚠️","o","https://tourismus.regensburg.de","UNESCO staré město, Kamenný most, katedrála. Kafe dne u Dunaje ☕","P Unterer Wöhrd na ostrově — venkovní, Transit OK. Do centra nejezdi.","Kamenný most (1146) byl vzorem pro Karlův most. A Wurstkuchl u mostu je prý nejstarší „fastfood“ světa — klobásky se tu smaží 850 let.",1,1,0],
 ["⛰️ Donaudurchbruch + Weltenburg",48.8983,11.8203,420,"S",3,"Z","klášter zdarma, loď VYNECH (~20 €) — jdi pěšky","✅","o","https://www.kloster-weltenburg.de","Dunaj prořezaný vápencovými skalami; stezka z Kelheimu ~5 km.","P Kelheim Volksfestplatz (velké), pak pěšky/na kole podél řeky.","Klášterní pivovar Weltenburg vaří od roku 1050 — nejstarší klášterní pivovar světa. Tmavé Barock Dunkel k obědu na nádvoří.",0,2,0],
-["💦 Eistobel (Grünenbach)",47.6626,9.9895,620,"S",3,"L","~2 €","✅","h","https://de.wikipedia.org/wiki/Eistobel","Kaskády, mísy a tůně řeky Argen — nejlepší 2 € v Allgäu. 2–2,5 h.","P u Argentobelbrücke přímo u vstupu, Transit pohodlně.","Jméno má podle zimy: vodopády zamrzají do ledových varhan. V létě je to zelená džungle.",0,2,0],
-["💦 Scheidegger Wasserfälle",47.5780,9.8360,635,"V",1,"L","~5 €","✅","o","https://de.wikipedia.org/wiki/Scheidegger_Wasserf%C3%A4lle","Dva vodopády s vyhlídkovými plošinami, upravený areál.","P přímo u vstupu.","Vyhlášeno jedním z nejkrásnějších geotopů Bavorska. Když šetříš, stačí Eistobel — je hezčí.",0,1,0],
+["💦 Eistobel (Grünenbach)",47.6403,10.0237,620,"S",3,"L","~2 €","✅","h","https://de.wikipedia.org/wiki/Eistobel","Kaskády, mísy a tůně řeky Argen — nejlepší 2 € v Allgäu. 2–2,5 h.","P u Argentobelbrücke přímo u vstupu, Transit pohodlně.","Jméno má podle zimy: vodopády zamrzají do ledových varhan. V létě je to zelená džungle.",0,2,0],
+["💦 Scheidegger Wasserfälle",47.5915,9.8415,635,"V",1,"L","~5 €","✅","o","https://de.wikipedia.org/wiki/Scheidegger_Wasserf%C3%A4lle","Dva vodopády s vyhlídkovými plošinami, upravený areál.","P přímo u vstupu.","Vyhlášeno jedním z nejkrásnějších geotopů Bavorska. Když šetříš, stačí Eistobel — je hezčí.",0,1,0],
 ["🏰 Lindau – ostrov",47.5465,9.6840,660,"M",3,"Z","město zdarma; stellplatz ~15–20 €/noc","✅","h","https://cs.wikipedia.org/wiki/Lindau","Staré město na ostrově, přístav se lvem a majákem. ZÁKLADNA. Kafe dne na promenádě ☕","Stellplatz Lindau-Reutin: velký, bezpečný, do centra 15 min pěšky / 5 min kolo.","Maják v přístavu je nejjižnější v Německu — a jediný s hodinami. Lev naproti měří 6 m a hledí na Alpy.",1,1,1],
 ["🚲 Nonnenhorn / Wasserburg",47.5799,9.6056,668,"J",2,"Z","zdarma","✅","o","https://de.wikipedia.org/wiki/Nonnenhorn","Nejhezčí kus cyklostezky kolem jezera: vinice, mola, poloostrov Wasserburg.","P u nádraží Nonnenhorn, pak na kolo.","Tady se pěstuje víno na německém břehu Bodensee — vinaři prodávají rovnou ze dvora.",0,1,1],
 ["🥾 Pfänder – pěšky z Bregenzu",47.5045,9.7526,672,"P",3,"Z","pěšky zdarma (lanovka ~17 € netřeba)","⚠️","o","https://www.pfaender.at","Výstup ~1,5 h značenou cestou, nahoře výhled na celé jezero.","P u údolní stanice lanovky (venkovní část) nebo dojeď z Lindau na kole.","Z vrcholu je vidět 240 alpských vrcholů a tři země najednou. Dolů to sběhneš za hodinu.",0,3,0],
@@ -445,7 +458,7 @@ const D=[
 ["🥾 Glaubenbielen – rašeliniště",46.7940,8.0960,885,"P",3,"Z","zdarma","⚠️","o","https://www.biosphaere.ch","Dřevěné chodníky přes největší rašeliniště CH, biosféra UNESCO. Ticho.","Malá P u silnice na sedle; silnice úzká v serpentinách — jeď mimo špičku.","Entlebuch je „švýcarská Aljaška“ — kraj tak chudý a divoký, že si z něj Švýcaři dělali legraci. Dnes chráněný poklad.",0,2,0],
 ["⛰️ Aareschlucht (Meiringen)",46.7237,8.2029,905,"S",2,"P","~12 CHF","✅","h","https://www.aareschlucht.ch","1,4 km lávek nad tyrkysovou Aarou sevřenou 200m stěnami.","Vlastní velké P u západního vstupu.","Jediné vstupné, které doporučuju: soutěsku vybrousila ledovcová voda a lávky visí nad ní od roku 1888. Funguje i za deště — tvoje „muzeum dne“.",1,1,0],
 ["💦 Reichenbachfälle – pěšky",46.7160,8.1830,907,"V",2,"Z","stezka zdarma (lanovka ~12 CHF netřeba)","✅","o","https://de.wikipedia.org/wiki/Reichenbachfall","Na vyhlídku vede stezka ~30 min do kopce.","P u údolní stanice historické lanovky.","Tady Conan Doyle 1893 „zabil“ Sherlocka Holmese v souboji s Moriartym. Čtenáři nosili smuteční pásky, Doyle ho musel oživit. Na skále je deska.",0,2,0],
-["⛰️ Rosenlauischlucht",46.6659,8.1519,913,"S",3,"L","~8 CHF","⚠️","o","https://www.rosenlauischlucht.ch","Divočejší a prázdnější sestra Aareschlucht.","Horská silnice z Meiringenu je úzká — jeď pomalu, míjecí místa. P u vstupu.","Stěny vyleštil ledovec do vln a spirál (Gletscherschliff). Plať jen jednu soutěsku: buď tuhle, nebo Aareschlucht.",0,2,0],
+["⛰️ Rosenlauischlucht",46.6788,8.1555,913,"S",3,"L","~8 CHF","⚠️","o","https://www.rosenlauischlucht.ch","Divočejší a prázdnější sestra Aareschlucht.","Horská silnice z Meiringenu je úzká — jeď pomalu, míjecí místa. P u vstupu.","Stěny vyleštil ledovec do vln a spirál (Gletscherschliff). Plať jen jednu soutěsku: buď tuhle, nebo Aareschlucht.",0,2,0],
 ["🌊 Brienz – jezero",46.7560,8.0300,918,"J",3,"Z","břeh a SUP zdarma","✅","h","https://www.brienz-tourismus.ch","Nejtyrkysovější jezero CH. SUP ráno za bezvětří. ZÁKLADNA. Kafe na dřevěné promenádě ☕","Kemp/stellplatz Brienz u jezera; přes den P Seefeld.","Brienz je vesnice řezbářů — místní škola řezbářství je jediná v CH. Barvu jezeru dává ledovcová „mouka“ z Aary.",0,1,1],
 ["💦 Giessbachfälle ⭐",46.7350,7.9860,923,"V",3,"Z","zdarma (funikulár netřeba)","✅","h","https://www.giessbach.ch","14 kaskád padajících 500 m do jezera + pohádkový grandhotel.","P Giessbach nad hotelem, pak 20 min pěšky dolů. Nebo připluj na SUPu z Brienzu.","Funikulár k hotelu (1879) je nejstarší v Evropě. Hotel měl být zbourán a nahrazen betonem — zachránil ho aktivista Franz Weber celonárodní sbírkou.",0,1,1],
 ["🏄 Iseltwald",46.7100,7.9650,927,"J",1,"L","molo ~5 CHF, břeh zdarma","⚠️","o","https://de.wikipedia.org/wiki/Iseltwald","Rybářská vesnička na výběžku do jezera.","P na kraji obce (placené), dál pěšky.","Molo proslavil korejský seriál Crash Landing on You — jezdí sem tolik fanoušků, že obec dala na molo turniket za 5 CHF. Břeh vedle je zdarma a stejný.",0,1,1],
@@ -549,8 +562,21 @@ function drawMap(){
   $("#legend").innerHTML=L;
 }
 
+const WIKI={0:"cs:Hradec Králové",1:"de:Waldnaabtal",2:"de:Steinberger See",3:"de:Höllbachtal",4:"de:Walhalla",5:"cs:Řezno",6:"de:Kloster Weltenburg",7:"de:Eistobel",8:"de:Scheidegger Wasserfälle",9:"cs:Lindau",10:"de:Nonnenhorn",11:"de:Pfänder",12:"de:Rheindelta",13:"de:Meersburg",14:"de:Pfahlbaumuseum Unteruhldingen",15:"cs:Kostnice",16:"de:Stein am Rhein",17:"de:Diessenhofen",18:"de:Rheinfall",19:"de:Munot",20:"de:Stiftsbibliothek St. Gallen",21:"de:Appenzell",22:"de:Seerenbachfälle",23:"de:Quinten",24:"de:Rapperswil",25:"de:Kloster Einsiedeln",26:"de:Lauerzersee",27:"cs:Lucern",28:"de:Rigi",29:"de:Stoosbahn",30:"de:Hohle Gasse",31:"de:Rütli",32:"de:Alpnachersee",33:"de:Glaubenbielenpass",34:"de:Aareschlucht",35:"de:Reichenbachfall",36:"de:Rosenlauischlucht",37:"de:Brienzersee",38:"de:Giessbachfälle",39:"de:Iseltwald",40:"de:Trümmelbachfälle",41:"de:Staubbachfall",42:"de:Grindelwald",43:"de:Bachalpsee",44:"de:Schynige Platte",45:"de:Beatushöhlen",46:"de:Niederhorn",47:"de:Schloss Oberhofen",48:"de:Oeschinensee",49:"de:Blausee",50:"de:Adelboden",51:"fr:Gruyères",52:"fr:Jogne",53:"fr:Île d'Ogoz",54:"fr:Gorges de l'Areuse",55:"fr:Château de Chillon",56:"fr:Villeneuve (Vaud)",57:"fr:Lavaux",58:"fr:Montreux",59:"fr:Rochers de Naye",60:"de:Lac de Taney",61:"fr:Abbaye de Saint-Maurice d'Agaune",62:"fr:Pissevache",63:"fr:Salanfe",64:"fr:Martigny",65:"fr:Champéry",66:"fr:Châtel (Haute-Savoie)"};
+const IMGC={};
+function loadImg(p){const w=WIKI[p.i];const box=$("#pimg"),im=$("#pimgI");if(!w||!box)return;
+  im.onerror=()=>{box.style.display="none";};
+  const show=u=>{im.src=u;box.style.display="block";};
+  if(IMGC[p.i]){show(IMGC[p.i]);return;}
+  const ix=w.indexOf(":");const lang=w.slice(0,ix),title=w.slice(ix+1);
+  fetch("https://"+lang+".wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title))
+    .then(r=>r.ok?r.json():null)
+    .then(j=>{if(!j||!j.thumbnail)return;let u=j.thumbnail.source.replace(/\/(\d+)px-/,"/640px-");IMGC[p.i]=u;show(u);})
+    .catch(()=>{});}
+
 // ---------- CARD ----------
 function openCard(i){
+  CURCARD=i;
   const p=P[i];
   const near=P.filter(q=>q.i!==i&&q.p!=="t").map(q=>({q,d2:Math.pow(q.la-p.la,2)+Math.pow((q.lo-p.lo)*0.7,2)})).sort((a,b)=>a.d2-b.d2).slice(0,3);
   const pk=PARK[p.i]||null;
@@ -572,6 +598,8 @@ function openCard(i){
     +'<div class="park"><b>'+(p.dod.startsWith("✅")?"Transit OK":p.dod.startsWith("⚠")?"Transit – pozor":"Bez dodávky")+'</b>'
     +(pk?'<br><b>'+esc(pk[2])+'</b> · '+esc(pk[3])+' · '+esc(pk[4])+(pk[5]?'<br>'+esc(pk[5]):''):'<br>'+esc(p.pk))
     +'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS parkoviště '+pkLa+', '+pkLo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
+    +'<div class="kv">Jak to vypadá</div>'
+    +'<div class="pimg" id="pimg" style="display:none"><img id="pimgI" alt="" loading="lazy"><span class="pimgc">foto: Wikipedia</span></div>'
     +'<div class="kv">Kde to je</div>'
     +'<div class="mini"><iframe id="miniMap" src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z='+MZ+'&output=embed&hl=cs" loading="lazy" title="mapa"></iframe>'
     +'<a class="minilink" target="_blank" rel="noopener" aria-label="otevřít v Google Maps" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"></a>'
@@ -597,15 +625,31 @@ function openCard(i){
   const setZ=z=>{MZ=Math.max(6,Math.min(15,z));const f=$("#miniMap");if(f)f.src="https://maps.google.com/maps?q="+p.la+","+p.lo+"&z="+MZ+"&output=embed&hl=cs";};
   $("#mzIn").addEventListener("click",e=>{e.preventDefault();setZ(MZ+1);});
   $("#mzOut").addEventListener("click",e=>{e.preventDefault();setZ(MZ-1);});
-  $("#visBtn").addEventListener("click",()=>{if(S.vis[i]){delete S.vis[i];}else{S.vis[i]=Date.now();S.pos=i;$("#posSel").value=i;}save();drawRibbon();drawMap();renderAll();openCard(i);});
-  $("#setHere").addEventListener("click",()=>{S.pos=i;$("#posSel").value=i;save();drawRibbon();drawMap();renderNow();closeM();});
+  loadImg(p);
+  $("#visBtn").addEventListener("click",()=>{
+    const prevPos=S.pos, prevTs=S.vis[i];
+    if(S.vis[i]){
+      delete S.vis[i];save();refreshPos();
+      showUndo("Check-in zrušen: "+nm(p),()=>{S.vis[i]=prevTs;save();refreshPos();});
+    }else{
+      S.vis[i]=Date.now();S.pos=i;save();refreshPos();
+      showUndo("Check-in: "+nm(p),()=>{delete S.vis[i];S.pos=prevPos;save();refreshPos();});
+    }
+  });
+  $("#setHere").addEventListener("click",()=>{
+    const prevPos=S.pos;
+    S.pos=i;save();closeM();refreshPos();
+    showUndo("Pozice: "+nm(p),()=>{S.pos=prevPos;save();refreshPos();});
+  });
   $("#closeM").addEventListener("click",closeM);
 }
-function closeM(){$("#ov").classList.remove("on");$("#modal").classList.remove("on");}
+function closeM(){CURCARD=null;$("#ov").classList.remove("on");$("#modal").classList.remove("on");}
 $("#ov").addEventListener("click",closeM);
 
 // ---------- CO TEĎ ----------
-let fTime=2,fWx="sun",fNrg=2,MZ=11;
+let fTime=2,fWx="sun",fNrg=2,MZ=11,CURCARD=null,UNDO=null;
+function refreshPos(){$("#posSel").value=S.pos;drawRibbon();drawMap();renderAll();if(CURCARD!==null&&$("#modal").classList.contains("on"))openCard(CURCARD);}
+function showUndo(msg,fn){UNDO=fn;$("#toastMsg").textContent=msg;const t=$("#toast");t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>{t.classList.remove("on");UNDO=null;},7000);}
 function chip(elId,cb){$( "#"+elId).querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
   $("#"+elId).querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset.v);}));}
 function renderNow(){
@@ -718,12 +762,24 @@ function renderAll(){renderNow();renderList();renderLog();drawRibbon();}
   await load();
   $("#posSel").innerHTML=P.map(p=>'<option value="'+p.i+'">'+esc(nm(p))+' · km '+p.km+'</option>').join("");
   $("#posSel").value=S.pos;
-  $("#posSel").addEventListener("change",e=>{S.pos=+e.target.value;save();drawRibbon();renderNow();});
+  $("#posSel").addEventListener("change",e=>{
+    const prevPos=S.pos;
+    S.pos=+e.target.value;save();drawRibbon();drawMap();renderNow();
+    showUndo("Pozice: "+nm(P[S.pos]),()=>{S.pos=prevPos;save();refreshPos();});
+  });
   chip("chTime",v=>{fTime=+v;renderNow();});
   chip("chWx",v=>{fWx=v;renderNow();});
   chip("chNrg",v=>{fNrg=+v;renderNow();});
   chip("chMode",v=>{mapMode=v;drawMap();});
   buildFilterChips();
+  $("#resetBtn").addEventListener("click",()=>{
+    if(!confirm("Opravdu restartovat cestu? Smažou se check-iny, pozice, kilometry i rozpočet. Preference a poznámky zůstanou."))return;
+    const snap=JSON.stringify(S);
+    S.vis={};S.pos=0;S.walkKm=0;S.driveKm=0;S.bud=[];
+    save();refreshPos();
+    showUndo("Cesta restartována",()=>{S=JSON.parse(snap);save();refreshPos();});
+  });
+  $("#toastUndo").addEventListener("click",()=>{const f=UNDO;UNDO=null;$("#toast").classList.remove("on");if(f)f();});
   renderAll();drawMap();
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
     try{ navigator.serviceWorker.register("sw.js"); }catch(e){}
