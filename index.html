@@ -28,7 +28,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{font-family:var(--sans);background:var(--paper);color:var(--ink);padding-bottom:78px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);padding-bottom:78px;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27440%27%20height%3D%27440%27%20viewBox%3D%270%200%20440%20440%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232E2A23%27%20stroke-opacity%3D%270.05%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%3E%3Cpath%20d%3D%27M30%2070%20C70%2025%20160%2020%20205%2062%20C245%20100%20215%20150%20150%20152%20C85%20154%20-8%20113%2030%2070%20Z%27%2F%3E%3Cpath%20d%3D%27M62%2074%20C92%2044%20155%2042%20185%2070%20C212%2096%20192%20126%20148%20128%20C104%20130%2036%20100%2062%2074%20Z%27%2F%3E%3Cpath%20d%3D%27M100%2082%20C115%2066%20152%2066%20165%2082%20C178%2098%20162%20110%20138%20110%20C114%20110%2087%2096%20100%2082%20Z%27%2F%3E%3Cpath%20d%3D%27M300%2040%20C350%205%20430%2030%20435%2080%20C440%20128%20380%20150%20330%20132%20C282%20115%20255%2072%20300%2040%20Z%27%2F%3E%3Cpath%20d%3D%27M322%2058%20C355%2034%20405%2050%20408%2084%20C411%20116%20370%20130%20336%20118%20C303%20106%20292%2080%20322%2058%20Z%27%2F%3E%3Cpath%20d%3D%27M60%20260%20C40%20215%2095%20185%20150%20200%20C205%20214%20220%20262%20185%20292%20C150%20322%2082%20308%2060%20260%20Z%27%2F%3E%3Cpath%20d%3D%27M88%20258%20C76%20228%20112%20208%20150%20218%20C188%20228%20198%20260%20174%20280%20C150%20300%20102%20292%2088%20258%20Z%27%2F%3E%3Cpath%20d%3D%27M118%20254%20C112%20238%20132%20226%20152%20232%20C172%20238%20176%20254%20162%20264%20C148%20274%20126%20270%20118%20254%20Z%27%2F%3E%3Cpath%20d%3D%27M290%20240%20C270%20200%20320%20168%20380%20182%20C438%20196%20452%20250%20415%20285%20C378%20320%20312%20300%20290%20240%20Z%27%2F%3E%3Cpath%20d%3D%27M318%20240%20C305%20212%20340%20190%20380%20200%20C420%20210%20428%20246%20402%20268%20C376%20290%20332%20278%20318%20240%20Z%27%2F%3E%3Cpath%20d%3D%27M348%20238%20C342%20224%20360%20212%20380%20218%20C400%20224%20402%20242%20388%20252%20C374%20262%20356%20254%20348%20238%20Z%27%2F%3E%3Cpath%20d%3D%27M120%20380%20C150%20350%20220%20352%20250%20384%20C265%20400%20260%20420%20240%20434%27%2F%3E%3Cpath%20d%3D%27M0%20180%20C40%20168%2090%20172%20120%20190%27%2F%3E%3Cpath%20d%3D%27M240%20120%20C280%20132%20330%20128%20360%20108%27%2F%3E%3Cpath%20d%3D%27M0%20330%20C30%20318%2060%20322%2080%20340%27%2F%3E%3Cpath%20d%3D%27M370%20350%20C400%20340%20425%20344%20440%20358%27%2F%3E%3Cpath%20d%3D%27M180%2012%20C210%202%20250%204%20275%2020%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");background-size:440px auto}
+#modal{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27440%27%20height%3D%27440%27%20viewBox%3D%270%200%20440%20440%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%232E2A23%27%20stroke-opacity%3D%270.05%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%3E%3Cpath%20d%3D%27M30%2070%20C70%2025%20160%2020%20205%2062%20C245%20100%20215%20150%20150%20152%20C85%20154%20-8%20113%2030%2070%20Z%27%2F%3E%3Cpath%20d%3D%27M62%2074%20C92%2044%20155%2042%20185%2070%20C212%2096%20192%20126%20148%20128%20C104%20130%2036%20100%2062%2074%20Z%27%2F%3E%3Cpath%20d%3D%27M100%2082%20C115%2066%20152%2066%20165%2082%20C178%2098%20162%20110%20138%20110%20C114%20110%2087%2096%20100%2082%20Z%27%2F%3E%3Cpath%20d%3D%27M300%2040%20C350%205%20430%2030%20435%2080%20C440%20128%20380%20150%20330%20132%20C282%20115%20255%2072%20300%2040%20Z%27%2F%3E%3Cpath%20d%3D%27M322%2058%20C355%2034%20405%2050%20408%2084%20C411%20116%20370%20130%20336%20118%20C303%20106%20292%2080%20322%2058%20Z%27%2F%3E%3Cpath%20d%3D%27M60%20260%20C40%20215%2095%20185%20150%20200%20C205%20214%20220%20262%20185%20292%20C150%20322%2082%20308%2060%20260%20Z%27%2F%3E%3Cpath%20d%3D%27M88%20258%20C76%20228%20112%20208%20150%20218%20C188%20228%20198%20260%20174%20280%20C150%20300%20102%20292%2088%20258%20Z%27%2F%3E%3Cpath%20d%3D%27M118%20254%20C112%20238%20132%20226%20152%20232%20C172%20238%20176%20254%20162%20264%20C148%20274%20126%20270%20118%20254%20Z%27%2F%3E%3Cpath%20d%3D%27M290%20240%20C270%20200%20320%20168%20380%20182%20C438%20196%20452%20250%20415%20285%20C378%20320%20312%20300%20290%20240%20Z%27%2F%3E%3Cpath%20d%3D%27M318%20240%20C305%20212%20340%20190%20380%20200%20C420%20210%20428%20246%20402%20268%20C376%20290%20332%20278%20318%20240%20Z%27%2F%3E%3Cpath%20d%3D%27M348%20238%20C342%20224%20360%20212%20380%20218%20C400%20224%20402%20242%20388%20252%20C374%20262%20356%20254%20348%20238%20Z%27%2F%3E%3Cpath%20d%3D%27M120%20380%20C150%20350%20220%20352%20250%20384%20C265%20400%20260%20420%20240%20434%27%2F%3E%3Cpath%20d%3D%27M0%20180%20C40%20168%2090%20172%20120%20190%27%2F%3E%3Cpath%20d%3D%27M240%20120%20C280%20132%20330%20128%20360%20108%27%2F%3E%3Cpath%20d%3D%27M0%20330%20C30%20318%2060%20322%2080%20340%27%2F%3E%3Cpath%20d%3D%27M370%20350%20C400%20340%20425%20344%20440%20358%27%2F%3E%3Cpath%20d%3D%27M180%2012%20C210%202%20250%204%20275%2020%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");background-size:440px auto}
 /* hero */
 #hero{max-width:760px;margin:0 auto;padding:18px 16px 0;text-align:center}
 #hero .brand{font-family:var(--mono);font-size:19px;letter-spacing:.42em;text-transform:uppercase;font-weight:700}
@@ -130,6 +131,18 @@ nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2p
 .kmrow{display:flex;align-items:center;gap:8px}
 .kmrow input{flex:1}
 .kmrow .cico{width:22px;height:22px;flex:none}
+
+#ribbonWrap{position:relative}
+#vanMark{position:absolute;top:12px;left:2%;transform:translateX(-50%);transition:left 1s cubic-bezier(.34,1.45,.64,1);pointer-events:none}
+#vanMark svg{width:27px;height:27px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;animation:vanbob 1.25s ease-in-out infinite;transform-origin:50% 90%}
+#vanMark::after{content:"";position:absolute;left:-7px;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--muted);opacity:0;animation:puff 1.25s ease-out infinite}
+@keyframes vanbob{0%,100%{transform:rotate(-2.5deg) translateY(0)}50%{transform:rotate(2.5deg) translateY(-2px)}}
+@keyframes puff{0%{opacity:.45;transform:translateX(0) scale(.5)}100%{opacity:0;transform:translateX(-12px) scale(1.4)}}
+.minilink{position:absolute;inset:0;z-index:1}
+.minihint{z-index:2}
+.mzoom{position:absolute;right:8px;top:8px;z-index:3;display:flex;flex-direction:column;gap:6px}
+.mzoom button{width:36px;height:36px;border:1.8px solid var(--ink);border-radius:10px;background:var(--card);font-size:19px;font-weight:700;line-height:1;box-shadow:2px 2px 0 rgba(46,42,35,.22);cursor:pointer;color:var(--ink)}
+.mzoom button:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(46,42,35,.22)}
 </style>
 </head>
 <body>
@@ -176,7 +189,7 @@ nav button.on .icw{background:var(--paper);border-color:var(--ink);box-shadow:2p
   </svg>
   <div id="hdrSub">HK → CHÂTEL · 1 180 KM · 67 MÍST · SÓLO · SRPEN</div>
 </div>
-<div id="ribbonWrap"><svg id="ribbon" viewBox="0 0 1000 46" preserveAspectRatio="none"></svg></div>
+<div id="ribbonWrap"><svg id="ribbon" viewBox="0 0 1000 46" preserveAspectRatio="none"></svg><div id="vanMark"><svg><use href="#i-van"/></svg></div></div>
 
 <main>
 <!-- CO TEĎ -->
@@ -436,10 +449,10 @@ function drawRibbon(){
   seg.forEach(s=>{const x1=s[0]/max*980+10,x2=s[1]/max*980+10;
     h+='<rect x="'+x1+'" y="20" width="'+(x2-x1-2)+'" height="8" rx="4" fill="'+s[3]+'"/>';
     h+='<text x="'+((x1+x2)/2)+'" y="14" text-anchor="middle" font-size="10" font-family="monospace" fill="#8A8272">'+s[2]+'</text>';});
-  const cur=P[S.pos]||P[0];const x=cur.km/max*980+10;
-  h+='<g stroke="#2E2A23" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-van" x="'+(x-9)+'" y="27" width="18" height="18"/></g>';
+  const cur=P[S.pos]||P[0];
   h+='<text x="990" y="42" text-anchor="end" font-size="9" font-family="monospace" fill="#8A8272">'+cur.km+' / 1180 km</text>';
   svg.innerHTML=h;
+  const vmk=$("#vanMark"); if(vmk) vmk.style.left=(cur.km/max*96+2)+"%";
 }
 
 // ---------- MAP ----------
@@ -471,10 +484,11 @@ function drawMap(){
 function openCard(i){
   const p=P[i];
   const near=P.filter(q=>q.i!==i&&q.p!=="t").map(q=>({q,d2:Math.pow(q.la-p.la,2)+Math.pow((q.lo-p.lo)*0.7,2)})).sort((a,b)=>a.d2-b.d2).slice(0,3);
-  let btns='<a class="btn p" target="_blank" rel="noopener" href="'+nav(p)+'">🧭 Navigovat</a>'
-    +'<a class="btn g" target="_blank" rel="noopener" href="'+p.w+'">🌐 Web</a>'
-    +'<a class="btn g" target="_blank" rel="noopener" href="'+foto(p)+'">📷 Fotky</a>';
-  if(p.sup)btns+='<a class="btn g" target="_blank" rel="noopener" href="'+windy(p)+'">💨 Vítr (Windy)</a>';
+  let btns='<a class="btn p" target="_blank" rel="noopener" href="'+nav(p)+'"><svg><use href="#i-nav"/></svg>Navigovat</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="https://park4night.com/en/search?lat='+p.la+'&lng='+p.lo+'"><svg><use href="#i-tent"/></svg>Park4night</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="'+p.w+'"><svg><use href="#i-globe"/></svg>Web</a>'
+    +'<a class="btn g" target="_blank" rel="noopener" href="'+foto(p)+'"><svg><use href="#i-cam"/></svg>Fotky</a>';
+  if(p.sup)btns+='<a class="btn g" target="_blank" rel="noopener" href="'+windy(p)+'"><svg><use href="#i-wind"/></svg>Vítr (Windy)</a>';
   $("#mInner").innerHTML=
     '<h2>'+esc(nm(p))+'</h2>'
     +'<div style="margin-top:6px"><span class="badge" style="background:'+cvar(TYP[p.t][1])+'">'+TYP[p.t][0].replace(/^\S+\s/,"")+'</span>'
@@ -484,7 +498,10 @@ function openCard(i){
     +'<div class="fact">💡 '+esc(p.f)+'</div>'
     +'<div class="park"><b>'+(p.dod.startsWith("✅")?"Transit OK":p.dod.startsWith("⚠")?"Transit – pozor":"Bez dodávky")+'</b> · '+esc(p.pk)+'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS '+p.la+', '+p.lo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
     +'<div class="kv">Kde to je</div>'
-    +'<a class="mini" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"><iframe src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z=11&output=embed&hl=cs" loading="lazy" title="mapa"></iframe><span class="minihint">ťukni → detail v Google Maps</span></a>'
+    +'<div class="mini"><iframe id="miniMap" src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z='+MZ+'&output=embed&hl=cs" loading="lazy" title="mapa"></iframe>'
+    +'<a class="minilink" target="_blank" rel="noopener" aria-label="otevřít v Google Maps" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"></a>'
+    +'<div class="mzoom"><button id="mzIn" type="button">+</button><button id="mzOut" type="button">−</button></div>'
+    +'<span class="minihint">ťukni → detail v Google Maps</span></div>'
     +'<div class="kv">V okolí</div><div class="chips">'+near.map(o=>'<button class="chip nearb" data-i="'+o.q.i+'">'+esc(nm(o.q))+'</button>').join("")+'</div>'
     +'<div class="actions">'+btns+'</div>'
     +'<div class="kv" style="margin-top:14px">Návštěva</div>'
@@ -502,6 +519,9 @@ function openCard(i){
   }));
   $("#pNote").addEventListener("input",e=>{S.notes[i]=e.target.value;save();});
   $("#mInner").querySelectorAll(".nearb").forEach(b=>b.addEventListener("click",()=>openCard(+b.dataset.i)));
+  const setZ=z=>{MZ=Math.max(6,Math.min(15,z));const f=$("#miniMap");if(f)f.src="https://maps.google.com/maps?q="+p.la+","+p.lo+"&z="+MZ+"&output=embed&hl=cs";};
+  $("#mzIn").addEventListener("click",e=>{e.preventDefault();setZ(MZ+1);});
+  $("#mzOut").addEventListener("click",e=>{e.preventDefault();setZ(MZ-1);});
   $("#visBtn").addEventListener("click",()=>{if(S.vis[i]){delete S.vis[i];}else{S.vis[i]=Date.now();S.pos=i;$("#posSel").value=i;}save();drawRibbon();drawMap();renderAll();openCard(i);});
   $("#setHere").addEventListener("click",()=>{S.pos=i;$("#posSel").value=i;save();drawRibbon();drawMap();renderNow();closeM();});
   $("#closeM").addEventListener("click",closeM);
@@ -510,7 +530,7 @@ function closeM(){$("#ov").classList.remove("on");$("#modal").classList.remove("
 $("#ov").addEventListener("click",closeM);
 
 // ---------- CO TEĎ ----------
-let fTime=2,fWx="sun",fNrg=2;
+let fTime=2,fWx="sun",fNrg=2,MZ=11;
 function chip(elId,cb){$( "#"+elId).querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
   $("#"+elId).querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");cb(b.dataset.v);}));}
 function renderNow(){
