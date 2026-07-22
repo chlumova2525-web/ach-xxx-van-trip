@@ -564,16 +564,38 @@ function drawMap(){
 
 const WIKI={0:"cs:Hradec Králové",1:"de:Waldnaabtal",2:"de:Steinberger See",3:"de:Höllbachtal",4:"de:Walhalla",5:"cs:Řezno",6:"de:Kloster Weltenburg",7:"de:Eistobel",8:"de:Scheidegger Wasserfälle",9:"cs:Lindau",10:"de:Nonnenhorn",11:"de:Pfänder",12:"de:Rheindelta",13:"de:Meersburg",14:"de:Pfahlbaumuseum Unteruhldingen",15:"cs:Kostnice",16:"de:Stein am Rhein",17:"de:Diessenhofen",18:"de:Rheinfall",19:"de:Munot",20:"de:Stiftsbibliothek St. Gallen",21:"de:Appenzell",22:"de:Seerenbachfälle",23:"de:Quinten",24:"de:Rapperswil",25:"de:Kloster Einsiedeln",26:"de:Lauerzersee",27:"cs:Lucern",28:"de:Rigi",29:"de:Stoosbahn",30:"de:Hohle Gasse",31:"de:Rütli",32:"de:Alpnachersee",33:"de:Glaubenbielenpass",34:"de:Aareschlucht",35:"de:Reichenbachfall",36:"de:Rosenlauischlucht",37:"de:Brienzersee",38:"de:Giessbachfälle",39:"de:Iseltwald",40:"de:Trümmelbachfälle",41:"de:Staubbachfall",42:"de:Grindelwald",43:"de:Bachalpsee",44:"de:Schynige Platte",45:"de:Beatushöhlen",46:"de:Niederhorn",47:"de:Schloss Oberhofen",48:"de:Oeschinensee",49:"de:Blausee",50:"de:Adelboden",51:"fr:Gruyères",52:"fr:Jogne",53:"fr:Île d'Ogoz",54:"fr:Gorges de l'Areuse",55:"fr:Château de Chillon",56:"fr:Villeneuve (Vaud)",57:"fr:Lavaux",58:"fr:Montreux",59:"fr:Rochers de Naye",60:"de:Lac de Taney",61:"fr:Abbaye de Saint-Maurice d'Agaune",62:"fr:Pissevache",63:"fr:Salanfe",64:"fr:Martigny",65:"fr:Champéry",66:"fr:Châtel (Haute-Savoie)"};
 const IMGC={};
-function loadImg(p){const w=WIKI[p.i];const box=$("#pimg"),im=$("#pimgI");if(!w||!box)return;
+const BADIMG=/wappen|logo|karte|stadtplan|ortsplan|\bmap\b|flagge|flag_of|coat[_ ]?of[_ ]?arms|blason|armoiries|siegel|escudo|diagram|\.svg|\.gif|\.tif|\.pdf/i;
+function loadImg(p){
+  const box=$("#pimg"),im=$("#pimgI");if(!box)return;
   im.onerror=()=>{box.style.display="none";};
   const show=u=>{im.src=u;box.style.display="block";};
   if(IMGC[p.i]){show(IMGC[p.i]);return;}
+  const url="https://commons.wikimedia.org/w/api.php?action=query&generator=geosearch"
+    +"&ggscoord="+p.la+"%7C"+p.lo+"&ggsradius=1200&ggslimit=14&ggsnamespace=6"
+    +"&prop=imageinfo&iiprop=url%7Cmime&iiurlwidth=680&format=json&origin=*";
+  fetch(url).then(r=>r.ok?r.json():null).then(j=>{
+    const pages=j&&j.query&&j.query.pages?Object.values(j.query.pages):[];
+    pages.sort((a,b)=>(a.index||99)-(b.index||99));
+    const pick=pages.find(pg=>pg.imageinfo&&pg.imageinfo[0]
+      &&/image\/jpe?g/i.test(pg.imageinfo[0].mime||"")
+      &&!BADIMG.test(pg.title||""));
+    if(pick){const u=pick.imageinfo[0].thumburl||pick.imageinfo[0].url;IMGC[p.i]=u;show(u);return;}
+    wikiFallback(p,show);
+  }).catch(()=>wikiFallback(p,show));
+}
+function wikiFallback(p,show){
+  const w=WIKI[p.i];if(!w)return;
   const ix=w.indexOf(":");const lang=w.slice(0,ix),title=w.slice(ix+1);
   fetch("https://"+lang+".wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title))
     .then(r=>r.ok?r.json():null)
-    .then(j=>{if(!j||!j.thumbnail)return;let u=j.thumbnail.source.replace(/\/(\d+)px-/,"/640px-");IMGC[p.i]=u;show(u);})
-    .catch(()=>{});}
-
+    .then(j=>{
+      if(!j||!j.thumbnail)return;
+      const src=j.thumbnail.source;
+      if(BADIMG.test(src))return;
+      const u=src.replace(/\/(\d+)px-/,"/640px-");
+      IMGC[p.i]=u;show(u);
+    }).catch(()=>{});
+}
 // ---------- CARD ----------
 function openCard(i){
   CURCARD=i;
@@ -599,7 +621,7 @@ function openCard(i){
     +(pk?'<br><b>'+esc(pk[2])+'</b> · '+esc(pk[3])+' · '+esc(pk[4])+(pk[5]?'<br>'+esc(pk[5]):''):'<br>'+esc(p.pk))
     +'<br><span style="font-family:var(--mono);font-size:11px;color:var(--muted)">GPS parkoviště '+pkLa+', '+pkLo+' · km '+p.km+' trasy'+(p.rain?" · jde i za deště":"")+' · energie: '+["","pohov","normální","hory"][p.e]+'</span></div>'
     +'<div class="kv">Jak to vypadá</div>'
-    +'<div class="pimg" id="pimg" style="display:none"><img id="pimgI" alt="" loading="lazy"><span class="pimgc">foto: Wikipedia</span></div>'
+    +'<div class="pimg" id="pimg" style="display:none"><img id="pimgI" alt="" loading="lazy"><span class="pimgc">foto: Wikimedia</span></div>'
     +'<div class="kv">Kde to je</div>'
     +'<div class="mini"><iframe id="miniMap" src="https://maps.google.com/maps?q='+p.la+','+p.lo+'&z='+MZ+'&output=embed&hl=cs" loading="lazy" title="mapa"></iframe>'
     +'<a class="minilink" target="_blank" rel="noopener" aria-label="otevřít v Google Maps" href="https://www.google.com/maps/search/?api=1&query='+p.la+','+p.lo+'"></a>'
